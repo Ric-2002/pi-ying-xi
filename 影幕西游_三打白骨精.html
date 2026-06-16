@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>影幕西游 · 三打白骨精 —— 一场你亲手做、亲手演的皮影戏</title>
+<meta name="description" content="弘扬国家级非遗皮影戏：从制皮、雕刻、上色、装关节到幕后操纵，完整演绎《西游记·三打白骨精》。" />
+<style>
+  :root{
+    --gold:#D99A2B;
+    --ochre:#7A2E18;
+    --cream:#F4E5C0;
+    --night:#120B08;
+    --cinnabar:#B3261E;
+    --peacock:#1D6F7A;
+    --ink:#3A302A;
+    --smoke:#C9B68C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;font-family:"STSong","Songti SC","Noto Serif SC",serif;color:var(--cream);background:var(--night);overflow-x:hidden}
+  body{
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(217,154,43,0.18), transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(179,38,30,0.12), transparent 55%),
+      linear-gradient(180deg,#1a0f08,#0b0604);
+    min-height:100vh;
+  }
+  /* 仿牛皮纸纤维纹理 */
+  .fiber::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+    background-image:
+      repeating-linear-gradient(92deg,rgba(122,46,24,.08) 0 1px,transparent 1px 5px),
+      repeating-linear-gradient(2deg,rgba(58,48,42,.06) 0 1px,transparent 1px 7px);
+    mix-blend-mode:multiply;
+  }
+  .title{font-family:"STKaiti","KaiTi","楷体",serif;letter-spacing:.15em}
+  .seal{display:inline-block;padding:.25em .7em;border:2px solid var(--cinnabar);color:var(--cinnabar);font-weight:bold;transform:rotate(-3deg);background:rgba(244,229,192,.05)}
+  .wood-btn{
+    display:inline-block;padding:.8em 1.8em;border:2px solid var(--gold);color:var(--gold);background:linear-gradient(180deg,rgba(217,154,43,.08),rgba(122,46,24,.2));
+    cursor:pointer;font-family:inherit;font-size:1.05rem;letter-spacing:.1em;
+    box-shadow:0 2px 0 var(--ochre),0 0 0 1px rgba(0,0,0,.3) inset;
+    transition:transform .15s ease,background .3s;
+  }
+  .wood-btn:hover{background:linear-gradient(180deg,rgba(217,154,43,.25),rgba(122,46,24,.4));transform:translateY(-1px)}
+  .wood-btn:active{transform:translateY(1px);box-shadow:0 0 0 var(--ochre),0 0 0 1px rgba(0,0,0,.3) inset}
+  .wood-btn.primary{color:#1a0f08;background:linear-gradient(180deg,#eabf5f,#b8801f);border-color:#eabf5f}
+  .panel{background:rgba(20,12,6,.82);border:1px solid rgba(217,154,43,.4);border-radius:4px;box-shadow:0 10px 40px rgba(0,0,0,.55)}
+  .stage{position:relative;aspect-ratio:16/9;background:#1b1108;overflow:hidden;border:3px solid #3a2412;box-shadow:inset 0 0 80px #000,0 0 60px rgba(217,154,43,.15)}
+  /* 幕布 */
+  .curtain{position:absolute;inset:0;background:
+    radial-gradient(ellipse at 50% 50%,#f4e5c0 0%,#e5cf95 45%,#a88a4a 85%,#5a411d 100%);
+    filter:saturate(.8) brightness(.85);
+  }
+  .curtain.front{z-index:3;mix-blend-mode:normal;opacity:1}
+  .curtain.back{z-index:1;filter:brightness(1.15) saturate(1.05)}
+  /* 光源 */
+  .lamp{position:absolute;top:-40%;left:50%;width:120%;height:180%;transform:translateX(-50%);
+    background:radial-gradient(ellipse at 50% 30%,rgba(255,220,150,.55) 0%,rgba(255,200,110,.18) 30%,transparent 70%);z-index:2;pointer-events:none;animation:lampFlicker 6s ease-in-out infinite}
+  @keyframes lampFlicker{0%,100%{opacity:.95}50%{opacity:.82}}
+  .puppet-layer{position:absolute;inset:0;z-index:4;pointer-events:none}
+  .puppet-layer svg{width:100%;height:100%;overflow:visible}
+  /* 操控杆 */
+  .rod-stick{stroke:#3a2412;stroke-width:2;fill:none;opacity:.85}
+  /* 动作提示 */
+  .cue{position:absolute;z-index:10;left:50%;top:10%;transform:translateX(-50%);background:rgba(18,11,8,.82);color:var(--gold);padding:.6em 1.4em;border:1px solid var(--gold);font-size:1.1rem;letter-spacing:.08em;animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.85}50%{opacity:1;box-shadow:0 0 20px var(--gold)}}
+  /* 歌词 */
+  .lyric{position:absolute;z-index:10;left:50%;bottom:8%;transform:translateX(-50%);color:#f4e5c0;font-size:1.2rem;letter-spacing:.15em;text-align:center;text-shadow:0 2px 6px #000}
+  .lyric small{display:block;margin-top:.3em;color:var(--gold);font-size:.75em;opacity:.8}
+  /* 进度条 */
+  .timeline{position:absolute;z-index:10;left:5%;right:5%;bottom:2%;height:6px;background:rgba(255,255,255,.1);border:1px solid rgba(217,154,43,.3)}
+  .timeline > span{display:block;height:100%;background:linear-gradient(90deg,var(--cinnabar),var(--gold));width:0%}
+  /* 鼓点节拍 */
+  .beats{display:flex;gap:.6em;justify-content:center;margin:1.2em 0}
+  .beat{width:18px;height:18px;border-radius:50%;background:rgba(217,154,43,.2);border:1px solid var(--gold)}
+  .beat.on{background:var(--cinnabar);box-shadow:0 0 14px var(--cinnabar)}
+  /* 角色卡 */
+  .role-card{position:relative;padding:1.5em;border:1px solid rgba(217,154,43,.35);background:rgba(20,12,6,.55);cursor:pointer;transition:all .3s;text-align:center}
+  .role-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 10px 30px rgba(217,154,43,.15)}
+  .role-card.selected{border-color:var(--cinnabar);background:rgba(179,38,30,.08);box-shadow:0 0 25px rgba(179,38,30,.25)}
+  .role-card svg{width:100%;height:160px;margin-bottom:1em}
+  /* 制作台画布 */
+  .workbench{position:relative;aspect-ratio:4/3;background:
+    radial-gradient(ellipse at 50% 40%,#f4e5c0 0%,#e5cf95 55%,#b8975a 100%);
+    border:2px solid #5a411d;box-shadow:inset 0 0 40px rgba(90,45,20,.4);overflow:hidden}
+  .workbench svg{width:100%;height:100%;position:absolute;inset:0;cursor:crosshair}
+  /* 色盘 */
+  .palette{display:flex;gap:.5em;flex-wrap:wrap;margin-top:1em;justify-content:center}
+  .swatch{width:38px;height:38px;border:2px solid #5a411d;cursor:pointer;border-radius:50%;box-shadow:inset 0 0 6px rgba(0,0,0,.4)}
+  .swatch.active{box-shadow:0 0 0 3px var(--gold),inset 0 0 6px rgba(0,0,0,.4)}
+  /* 步骤导航 */
+  .steps{display:flex;gap:.5em;justify-content:center;flex-wrap:wrap;margin:1.5em 0}
+  .step{padding:.5em 1em;border:1px solid rgba(217,154,43,.4);color:var(--gold);font-size:.9rem;background:rgba(0,0,0,.25)}
+  .step.active{background:var(--gold);color:#1a0f08;border-color:var(--gold)}
+  .step.done::after{content:" ✓";color:var(--cinnabar)}
+  /* 视图切换 */
+  .view{display:none;min-height:100vh;padding:3em 1.5em}
+  .view.active{display:block;animation:fadeIn .5s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  /* 摄像头小窗 */
+  .cam{position:absolute;right:2%;top:2%;width:180px;height:120px;border:2px solid var(--gold);background:#000;z-index:20;overflow:hidden}
+  .cam video,.cam canvas{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+  .cam-label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.65);color:var(--gold);font-size:.7rem;padding:.2em .5em;text-align:center;letter-spacing:.1em}
+  /* 骨架点 */
+  .hand-dot{position:absolute;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%)}
+  /* 幕后/幕前切换按钮 */
+  .view-toggle{position:absolute;z-index:15;right:2%;top:2%;background:rgba(18,11,8,.8);color:var(--gold);border:1px solid var(--gold);padding:.4em 1em;cursor:pointer;font-family:inherit}
+  /* 文化卡片 */
+  .culture-card{background:rgba(20,12,6,.7);border-left:4px solid var(--cinnabar);padding:1.2em 1.5em;margin:1.5em auto;max-width:760px;color:#f4e5c0;line-height:1.9}
+  .culture-card h3{color:var(--gold);margin-bottom:.6em;font-size:1.2rem;letter-spacing:.1em}
+  /* 评分 */
+  .score{font-size:3rem;color:var(--gold);font-family:"STKaiti",serif;letter-spacing:.1em;margin:.3em 0}
+  /* 结尾片尾 */
+  .credits{position:relative;padding:3em 2em;text-align:center;background:linear-gradient(180deg,transparent,#0b0604 40%,#0b0604);color:var(--cream);line-height:2;font-size:1.1rem}
+  .credits h2{color:var(--gold);font-size:2rem;margin-bottom:1em;letter-spacing:.2em}
+  /* 烟雾 */
+  .smoke{position:absolute;inset:0;pointer-events:none;z-index:5;opacity:0;transition:opacity 1.5s;
+    background:radial-gradient(circle at 50% 60%,rgba(244,229,192,.5),transparent 60%)}
+  .smoke.on{opacity:.55;animation:smokeDrift 3s ease-out}
+  @keyframes smokeDrift{0%{transform:scale(.6) translateY(20%)}100%{transform:scale(1.8) translateY(-10%)}}
+  /* 辅助 */
+  .hidden{display:none!important}
+  .muted{opacity:.65}
+  .row{display:flex;gap:1.5em;flex-wrap:wrap;justify-content:center;align-items:stretch}
+  .row > *{flex:1 1 220px;min-width:220px}
+  section{max-width:1100px;margin:0 auto}
+  h1{font-size:3rem;text-align:center;margin:.2em 0 .3em;color:var(--gold)}
+  h2{font-size:1.8rem;color:var(--gold);letter-spacing:.12em;text-align:center;margin:1.5em 0 .8em}
+  p.subtitle{text-align:center;color:var(--smoke);margin-bottom:2em;letter-spacing:.2em}
+  .divider{text-align:center;color:var(--gold);margin:2em 0;letter-spacing:1.5em;font-size:.85rem;opacity:.6}
+  /* 关节铆钉 */
+  .rivet{fill:#3a2412;stroke:#D99A2B;stroke-width:1}
+  /* 雕刻路径提示 */
+  .carve-hint{stroke:rgba(179,38,30,.5);stroke-width:3;fill:none;stroke-dasharray:6 4;animation:dash 1.5s linear infinite}
+  @keyframes dash{to{stroke-dashoffset:-20}}
+  /* 颜色区域 hover */
+  .color-region{cursor:pointer;transition:stroke .2s}
+  .color-region:hover{stroke:var(--cinnabar)!important;stroke-width:2}
+  /* 关节可调提示 */
+  .joint-handle{fill:var(--cinnabar);opacity:.7;cursor:grab}
+  /* 响应式 */
+  @media (max-width:720px){h1{font-size:2rem}h2{font-size:1.3rem}.cam{width:120px;height:80px}.stage{aspect-ratio:4/3}}
+</style>
+</head>
+<body>
+
+<!-- ====== 序章 / 影窗首页 ====== -->
+<section id="view-home" class="view active">
+  <div class="stage" style="max-width:1000px;margin:2em auto">
+    <div class="curtain back"></div>
+    <div class="lamp"></div>
+    <!-- 飘动的皮影剪影 -->
+    <div class="puppet-layer" id="homePuppet"></div>
+    <div class="lyric" style="bottom:12%">
+      <span>一纸牛皮，三尺白布，一盏油灯 —— 千年故事，由你开场。</span>
+      <small>—— 国家级非物质文化遗产 · 皮影戏</small>
+    </div>
+  </div>
+
+  <h1 class="title">影 幕 西 游</h1>
+  <p class="subtitle">— 三 打 白 骨 精 —</p>
+
+  <div style="text-align:center;margin:2em 0">
+    <button class="wood-btn primary" onclick="go('roles')">✦ 开 始 制 影 ✦</button>
+    <button class="wood-btn" onclick="go('sources')">资 料 来 源</button>
+  </div>
+
+  <div class="culture-card">
+    <h3>【 立 意 · 非 遗 入 心 】</h3>
+    <p>皮影戏始于汉、兴于唐、盛于宋，是中国最古老的戏剧形式之一。一张牛皮经 <b>制皮、画稿、雕刻、敷彩、发汗、缀结</b> 六道大工序，方成一具"能说话的影子"。</p>
+    <p>本作不取猎奇视角，而以 <b>「亲手做 → 亲手演 → 亲眼看」</b> 三阶段，让你成为真正的皮影艺人：你雕刻的纹路会留在皮影上，你操纵的动作会变成你自己的剧目，你在幕后的汗水，终将化为幕前观众眼里的光。</p>
+    <p>愿你做完这一场戏后，再听到"皮影"二字，想起的不只是博物馆里的文物，而是你手中那根温热的操纵杆。</p>
+  </div>
+
+  <div class="row" style="margin:2em auto;max-width:900px">
+    <div class="panel" style="padding:1.5em;text-align:center"><div style="font-size:2rem;color:var(--gold)">① 制 皮</div><p class="muted" style="margin-top:.6em">选料、浸泡、刮毛、绷展，让牛皮薄如蝉翼。</p></div>
+    <div class="panel" style="padding:1.5em;text-align:center"><div style="font-size:2rem;color:var(--gold)">② 雕 刻</div><p class="muted" style="margin-top:.6em">推刀、拉刀、冲孔，三千刀方成一袭衣冠。</p></div>
+    <div class="panel" style="padding:1.5em;text-align:center"><div style="font-size:2rem;color:var(--gold)">③ 上 色</div><p class="muted" style="margin-top:.6em">朱砂、石绿、藤黄、赭石，矿物之色历经千年。</p></div>
+    <div class="panel" style="padding:1.5em;text-align:center"><div style="font-size:2rem;color:var(--gold)">④ 表 演</div><p class="muted" style="margin-top:.6em">两根操纵杆，一双手，演绎人间百态。</p></div>
+  </div>
+</section>
+
+<!-- ====== 角色选择 ====== -->
+<section id="view-roles" class="view">
+  <h2 class="title">— 择 一 影 人，与 你 同 演 —</h2>
+  <p class="subtitle">选中角色后，你将亲手雕刻、上色、装关节，并操纵它演完《三打白骨精》</p>
+
+  <div class="row" id="roleGrid" style="max-width:1000px;margin:1em auto"></div>
+
+  <div style="text-align:center;margin:2em 0">
+    <button class="wood-btn" onclick="go('home')">← 返 回</button>
+    <button class="wood-btn primary" onclick="confirmRole()" id="confirmRoleBtn" disabled style="opacity:.4">确 认 角 色 →</button>
+  </div>
+</section>
+
+<!-- ====== 制皮工坊 · 四步合一 ====== -->
+<section id="view-workshop" class="view">
+  <h2 class="title" id="workshopTitle">— 制 皮 工 坊 —</h2>
+  <p class="subtitle" id="workshopSubtitle">将一张牛皮，从生到熟，从熟到灵</p>
+
+  <div class="steps" id="workshopSteps"></div>
+
+  <div class="row" style="max-width:1100px;margin:1em auto">
+    <div style="flex:2 1 500px;min-width:320px">
+      <div class="workbench fiber" id="workbenchCanvas" style="position:relative"></div>
+      <div class="panel" id="workshopHint" style="padding:1em;margin-top:1em;text-align:center;color:var(--gold);letter-spacing:.08em;line-height:1.8"></div>
+    </div>
+    <div style="flex:1 1 260px;min-width:240px">
+      <div class="panel" style="padding:1.2em">
+        <div id="workshopSide"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:2em 0">
+    <button class="wood-btn" onclick="prevWorkshopStep()" id="prevStepBtn">← 上一步</button>
+    <button class="wood-btn primary" onclick="nextWorkshopStep()" id="nextStepBtn">下一步 →</button>
+  </div>
+
+  <div class="culture-card" id="cultureCard">
+    <!-- 由 JS 动态填充非遗知识点 -->
+  </div>
+</section>
+
+<!-- ====== 摄像头校准 / 排练 ====== -->
+<section id="view-rehearsal" class="view">
+  <h2 class="title">— 幕 后 双 手 · 校 准 与 排 练 —</h2>
+  <p class="subtitle">右手握主杆控身形，左手握手杆控动作；让你的影子，学会呼吸。</p>
+
+  <div class="row" style="max-width:1100px;margin:1em auto">
+    <div style="flex:2 1 600px;min-width:360px">
+      <div class="stage" id="rehearsalStage">
+        <div class="curtain back"></div>
+        <div class="lamp"></div>
+        <div class="puppet-layer" id="rehearsalPuppet"></div>
+        <div class="cue" id="rehearsalCue">请将双手放入光圈，右手控制主杆（身体），左手控制手杆（手臂）</div>
+        <div class="cam" id="rehearsalCam">
+          <video id="camVideo" autoplay playsinline muted></video>
+          <canvas id="camCanvas"></canvas>
+          <div class="cam-label">双 手 识 别 · 本 地 处 理</div>
+        </div>
+      </div>
+      <div class="beats" id="rehearsalBeats"></div>
+    </div>
+    <div style="flex:1 1 260px;min-width:240px">
+      <div class="panel" style="padding:1.2em">
+        <h3 style="color:var(--gold);margin-bottom:.8em">动作清单</h3>
+        <div id="actionList"></div>
+        <hr style="margin:1em 0;border-color:rgba(217,154,43,.2)"/>
+        <p style="font-size:.9rem;line-height:1.8;color:var(--smoke)">
+          · 打开摄像头：<button class="wood-btn" style="padding:.3em 1em;font-size:.85em" onclick="startCamera()">开 启</button><br/>
+          · 无摄像头可用键盘鼠标：<br/>
+          　鼠标移动 → 身体位置<br/>
+          　A/D 键 → 左臂上下<br/>
+          　←/→ 键 → 右臂上下<br/>
+          　空格 → 定格亮相<br/>
+          · 本页不上传任何图像，所有识别仅在浏览器本地进行。
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:2em 0">
+    <button class="wood-btn" onclick="go('workshop');initWorkshop()">← 返回修改</button>
+    <button class="wood-btn primary" onclick="go('stage');initStage()">入 戏 · 开 演 →</button>
+  </div>
+</section>
+
+<!-- ====== 正式演出 · 幕后模式 ====== -->
+<section id="view-stage" class="view">
+  <h2 class="title">— 幕 后 · 三 打 白 骨 精 —</h2>
+  <p class="subtitle">灯已亮，鼓已响。你的影子，就是今晚的主角。</p>
+
+  <div class="stage" id="stageStage" style="max-width:1100px;margin:1em auto">
+    <div class="curtain back"></div>
+    <div class="lamp"></div>
+    <div class="puppet-layer" id="stagePuppet"></div>
+    <div class="smoke" id="stageSmoke"></div>
+    <div class="cue" id="stageCue">准备……</div>
+    <div class="lyric" id="stageLyric"><span>　</span><small>　</small></div>
+    <div class="timeline"><span id="stageTimeline"></span></div>
+    <button class="view-toggle" onclick="toggleFrontBack()" id="frontBackBtn">切 换 到 幕 前 视 角</button>
+    <div class="cam" style="top:2%;right:2%;"><canvas id="stageCamCanvas"></canvas><div class="cam-label">双 手 实 时 映 射</div></div>
+  </div>
+
+  <div style="text-align:center;margin:1.5em 0">
+    <button class="wood-btn" onclick="startStageShow()" id="startStageBtn">✦ 开 始 演 出 ✦</button>
+    <button class="wood-btn" onclick="go('rehearsal')">← 回到排练</button>
+  </div>
+
+  <div class="culture-card">
+    <h3>【 演 出 指 引 · 真 实 剧 目 】</h3>
+    <p id="stageScriptHint">《三打白骨精》脱胎于《西游记》第二十七回，乃皮影戏经典传承剧目。本演出共五场：白骨精初现、悟空一识破、二次化身、唐僧念紧箍、三次定胜负。每场均有动作提示词与节拍提示，请在提示亮起时完成动作。</p>
+  </div>
+</section>
+
+<!-- ====== 幕前回放 ====== -->
+<section id="view-replay" class="view">
+  <h2 class="title">— 幕 前 · 你 演 的 那 一 场 —</h2>
+  <p class="subtitle">现在，请坐回观众席。看看你亲手做、亲手演的那一出戏。</p>
+
+  <div class="stage" id="replayStage" style="max-width:1100px;margin:1em auto">
+    <div class="curtain front"></div>
+    <div class="lamp" style="opacity:.9"></div>
+    <div class="puppet-layer" id="replayPuppet"></div>
+    <div class="smoke" id="replaySmoke"></div>
+    <div class="lyric" id="replayLyric"><span>　</span><small>　</small></div>
+    <div class="timeline"><span id="replayTimeline"></span></div>
+  </div>
+
+  <div style="text-align:center;margin:1.5em 0">
+    <div class="score" id="replayScore">—</div>
+    <p id="replayComment" style="text-align:center;color:var(--smoke);margin-bottom:1em;letter-spacing:.08em"></p>
+    <button class="wood-btn" onclick="replayAgain()">再 看 一 遍</button>
+    <button class="wood-btn primary" onclick="go('credits');startCredits()">→ 进 入 片 尾</button>
+  </div>
+</section>
+
+<!-- ====== 片尾 · 感动结尾 ====== -->
+<section id="view-credits" class="view">
+  <div class="credits" style="max-width:900px;margin:2em auto">
+    <h2 class="title">— 戏 已 终 · 影 未 散 —</h2>
+    <p id="creditLine1" style="font-size:1.25rem;line-height:2.2;letter-spacing:.05em">　</p>
+    <div class="divider">◆ ◆ ◆</div>
+    <p id="creditLine2" style="font-size:1.1rem;line-height:2.2;color:var(--smoke);letter-spacing:.05em">　</p>
+    <div class="divider">◆ ◆ ◆</div>
+    <p style="margin-top:2em;color:var(--gold);font-size:1.2rem;letter-spacing:.2em">— 感 谢 你 亲 手 守 护 了 一 场 千 年 之 戏 —</p>
+    <p class="muted" style="margin-top:1em;font-size:.9rem">国家级非物质文化遗产 · 皮影戏<br/>
+    本作基于公开非遗资料改编，制作与演出数据均保存在你本机浏览器，不收集任何个人信息。</p>
+    <div style="margin:2em 0">
+      <button class="wood-btn primary" onclick="resetAll()">从 头 再 演 一 场</button>
+      <button class="wood-btn" onclick="go('sources')">资料来源</button>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 资料来源 ====== -->
+<section id="view-sources" class="view">
+  <h2 class="title">— 资 料 来 源 与 非 遗 说 明 —</h2>
+  <div class="culture-card" style="max-width:880px">
+    <h3>非遗与工艺依据</h3>
+    <p>· 皮影戏（四川皮影戏/阆中皮影）：雕刻技法娴熟，线条流畅细腻，镂空留实得体，影人结构均衡。来源：中国非物质文化遗产网（<a href="https://www.ihchina.cn/project_details/13417/" style="color:var(--gold)">ihchina.cn</a>）</p>
+    <p>· 皮影戏（桐柏皮影戏）：集绘画、雕刻、古典文学、民间音乐、演唱、民俗文化为一体的综合性艺术。</p>
+    <p>· 皮影制作七大工序：<b>制皮、画稿、过稿、雕刻、敷彩、发汗、缀结</b>。</p>
+    <p>· 传统矿物颜料：朱砂、石青、石绿、赭石、藤黄、墨黑。</p>
+    <p>· 操纵系统：主杆（脖颈杆，控制身形与走位）、手杆（手腕杆，控制手臂与道具）。</p>
+    <h3 style="margin-top:1.5em">剧目依据</h3>
+    <p>· 《三打白骨精》源自明代吴承恩《西游记》第二十七回"尸魔三戏唐三藏，圣僧恨逐美猴王"，为皮影戏、京剧、绍剧等传统戏剧的经典传承剧目。</p>
+    <h3 style="margin-top:1.5em">隐私与开源</h3>
+    <p>· 摄像头仅用于浏览器本地手势识别，视频画面不上传、不保存。</p>
+    <p>· 演出回放仅保存角色姿态时间戳，不含人体图像数据。</p>
+    <p>· 本作品为创意参赛产物，仅供文化传播与公益展示使用。</p>
+  </div>
+  <div style="text-align:center;margin:2em 0">
+    <button class="wood-btn primary" onclick="go('home')">← 回 到 影 窗</button>
+  </div>
+</section>
+
+<script>
+/* ======================================================================
+ * 《影幕西游 · 三打白骨精》  ——  单文件网页游戏主逻辑
+ *  架构说明（中文注解）：
+ *  · 纯前端单文件、无构建步骤；数据结构按角色 / 剧本 / 姿态三级组织。
+ *  · 皮影使用 SVG 分层渲染（头 / 身 / 左臂 / 右臂 / 道具），每帧以 CSS transform 更新。
+ *  · 摄像头通过 getUserMedia 做色彩/运动粗略识别（双手二值化），拒绝时自动降级为键鼠。
+ *  · 演出时间轴（Script Timeline）驱动"提示词 + 唱词 + 节拍 + 目标姿态"同步推进。
+ *  · 演出帧记录到 performanceFrames，回放页按时间戳插值重现。
+ * ====================================================================== */
+
+/* ---------- 1. 角色数据（含 SVG 模板） ---------- */
+const ROLES = {
+  wukong:{name:"孙悟空",difficulty:"困难",color:"#B3261E",accent:"#D99A2B",
+    note:"金猴奋起千钧棒，玉宇澄清万里埃。主武器为金箍棒，动作需敏捷有力。",
+    parts:{head:"#E5CF95",face:"#D99A2B",body:"#B3261E",sash:"#F4E5C0",prop:"#7A2E18"},
+    propName:"金箍棒"},
+  tangseng:{name:"唐僧",difficulty:"简单",color:"#1D6F7A",accent:"#F4E5C0",
+    note:"贫僧自东土大唐而来。动作以缓、静、合掌、惊退为主。",
+    parts:{head:"#F4E5C0",face:"#E5CF95",body:"#1D6F7A",sash:"#D99A2B",prop:"#7A4521"},
+    propName:"禅杖"},
+  bajie:{name:"猪八戒",difficulty:"简单",color:"#7A2E18",accent:"#C9B68C",
+    note:"呆子也有威风时。动作需摇摆起伏、憨态可掬。",
+    parts:{head:"#E5CF95",face:"#C9B68C",body:"#7A2E18",sash:"#F4E5C0",prop:"#3A302A"},
+    propName:"九齿钉耙"},
+  wujing:{name:"沙僧",difficulty:"简单",color:"#3A302A",accent:"#D99A2B",
+    note:"忠厚护僧，持杖而立。动作稳重。",
+    parts:{head:"#F4E5C0",face:"#C9B68C",body:"#3A302A",sash:"#B3261E",prop:"#7A4521"},
+    propName:"月牙铲"},
+  baixiang:{name:"白骨精",difficulty:"中等",color:"#E5CF95",accent:"#B3261E",
+    note:"三化三变，妖气袭人。动作需飘忽、袖摆扩张、烟散化影。",
+    parts:{head:"#F4E5C0",face:"#E5CF95",body:"#B3261E",sash:"#3A302A",prop:"#120B08"},
+    propName:"袖剑"}
+};
+
+/* ---------- 2. 生成皮影 SVG 模板（分层，便于关节旋转） ---------- */
+function buildPuppetSVG(roleId,opts={}){
+  const r = ROLES[roleId];
+  const c = Object.assign({},r.parts,opts.colors||{});
+  // 各层坐标：以 viewBox 400x300 为基准，身体中心点为关节原点
+  return `
+  <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+    <!-- 身体（可旋转） -->
+    <g id="body" style="transform-origin:200px 170px">
+      <path d="M150 120 Q200 110 250 120 L260 240 Q200 260 140 240 Z"
+            fill="${c.body}" stroke="#3a2412" stroke-width="1.2"/>
+      <!-- 腰带/披 -->
+      <path d="M150 175 Q200 170 250 175 L252 188 Q200 195 148 188 Z"
+            fill="${c.sash}" stroke="#3a2412" stroke-width="1"/>
+      <!-- 衣纹镂空 -->
+      <circle cx="200" cy="200" r="6" fill="rgba(0,0,0,.25)"/>
+      <circle cx="180" cy="215" r="4" fill="rgba(0,0,0,.2)"/>
+      <circle cx="220" cy="215" r="4" fill="rgba(0,0,0,.2)"/>
+      <!-- 左腿 -->
+      <path d="M175 235 L172 280 L190 280 L190 238 Z" fill="${c.body}" stroke="#3a2412" stroke-width="1"/>
+      <!-- 右腿 -->
+      <path d="M210 238 L210 280 L228 280 L225 235 Z" fill="${c.body}" stroke="#3a2412" stroke-width="1"/>
+    </g>
+    <!-- 头部（可旋转，挂在身体上方） -->
+    <g id="head" style="transform-origin:200px 115px">
+      <ellipse cx="200" cy="100" rx="30" ry="36" fill="${c.head}" stroke="#3a2412" stroke-width="1.2"/>
+      <!-- 脸谱 -->
+      <path d="M186 96 Q200 88 214 96 Q212 110 200 114 Q188 110 186 96" fill="${c.face}" opacity=".6"/>
+      <!-- 眼睛 -->
+      <circle cx="190" cy="100" r="2.2" fill="#120B08"/>
+      <circle cx="210" cy="100" r="2.2" fill="#120B08"/>
+      <!-- 眉心（不同角色有差异） -->
+      ${roleId==="wukong"?`<path d="M194 90 L206 90" stroke="#B3261E" stroke-width="2"/>`:
+        roleId==="baixiang"?`<path d="M192 92 Q200 86 208 92" stroke="#B3261E" stroke-width="1.5"/>`:""}
+      <!-- 头饰/帽 -->
+      <path d="M170 78 Q200 58 230 78 L226 86 Q200 74 174 86 Z"
+            fill="${r.color}" stroke="#3a2412" stroke-width="1"/>
+      ${roleId==="tangseng"?`<circle cx="200" cy="70" r="5" fill="${c.sash}" stroke="#3a2412"/>`:""}
+      ${roleId==="wukong"?`<circle cx="200" cy="62" r="4" fill="#D99A2B" stroke="#3a2412"/>`:""}
+    </g>
+    <!-- 左臂（可旋转，肩关节在 155,145） -->
+    <g id="leftArm" style="transform-origin:155px 145px">
+      <path d="M150 140 Q120 180 105 220 Q118 224 128 188 Q140 158 158 148 Z"
+            fill="${c.body}" stroke="#3a2412" stroke-width="1"/>
+      <!-- 手 -->
+      <circle cx="110" cy="225" r="7" fill="${c.head}" stroke="#3a2412" stroke-width="1"/>
+    </g>
+    <!-- 右臂（可旋转，肩关节在 245,145） -->
+    <g id="rightArm" style="transform-origin:245px 145px">
+      <path d="M250 140 Q280 180 295 220 Q282 224 272 188 Q260 158 242 148 Z"
+            fill="${c.body}" stroke="#3a2412" stroke-width="1"/>
+      <circle cx="290" cy="225" r="7" fill="${c.head}" stroke="#3a2412" stroke-width="1"/>
+      <!-- 道具（武器，附右手） -->
+      <g id="prop" style="transform-origin:290px 225px">
+        ${roleId==="wukong"?`<rect x="288" y="95" width="4" height="140" fill="${c.prop}" stroke="#120B08"/>
+                             <rect x="282" y="85" width="16" height="14" fill="${r.accent}" stroke="#120B08"/>
+                             <rect x="282" y="238" width="16" height="14" fill="${r.accent}" stroke="#120B08"/>`:
+          roleId==="baixiang"?`<path d="M292 150 L310 220 L294 222 Z" fill="${c.prop}" stroke="#120B08"/>`:
+          roleId==="tangseng"?`<rect x="288" y="110" width="4" height="130" fill="${c.prop}"/>
+                                <circle cx="290" cy="105" r="8" fill="${r.accent}" stroke="#120B08"/>`:
+          roleId==="bajie"?`<g><path d="M280 210 L310 205 L308 215 L282 222 Z" fill="${c.prop}"/>
+                             <path d="M280 225 L310 220 L308 230 L282 235 Z" fill="${c.prop}"/>
+                             <path d="M280 240 L310 235 L308 245 L282 250 Z" fill="${c.prop}"/>
+                             <rect x="288" y="100" width="4" height="110" fill="${c.prop}"/></g>`:
+          `<rect x="286" y="90" width="8" height="150" fill="${c.prop}" stroke="#120B08"/>`}
+      </g>
+    </g>
+    <!-- 关节铆钉（视觉标记） -->
+    <circle class="rivet" cx="200" cy="115" r="3"/>
+    <circle class="rivet" cx="155" cy="145" r="3"/>
+    <circle class="rivet" cx="245" cy="145" r="3"/>
+    <!-- 操纵杆（幕后可见） -->
+    <g id="rods" style="display:none">
+      <line class="rod-stick" x1="200" y1="115" x2="200" y2="300"/>
+      <line class="rod-stick" x1="245" y1="145" x2="330" y2="295"/>
+      <line class="rod-stick" x1="155" y1="145" x2="70" y2="295"/>
+    </g>
+  </svg>`;
+}
+
+/* ---------- 3. 颜色盘（传统矿物色） ---------- */
+const PALETTE = [
+  {name:"朱砂",color:"#B3261E"},{name:"赭石",color:"#7A2E18"},
+  {name:"藤黄",color:"#D99A2B"},{name:"石青",color:"#1D6F7A"},
+  {name:"石绿",color:"#2F6B3E"},{name:"象牙白",color:"#F4E5C0"},
+  {name:"烟墨",color:"#3A302A"},{name:"胭脂",color:"#8A1C33"},
+  {name:"泥金",color:"#A8813A"},{name:"靛蓝",color:"#2A3E66"}
+];
+
+/* ---------- 4. 剧本时间轴（《三打白骨精》短剧） ---------- */
+const SCRIPT = [
+  {t:0,cue:"白骨精初现 · （身体缓慢左移，双臂轻摆如飘移）",lyric:"【唱】白虎岭前迷雾起，化作村姑踏草来。",sub:"—— 第一场",target:{x:40,y:50,leftArm:-20,rightArm:15,head:0,prop:0},smoke:true},
+  {t:6000,cue:"悟空火眼金睛 · （右手高抬，金箍棒上挑）",lyric:"【白】妖精！哪里逃！",sub:"—— 金猴一喝",target:{x:55,y:50,leftArm:-10,rightArm:-75,head:-5,prop:-80},smoke:false},
+  {t:12000,cue:"一棒挥出 · （右手横扫，身体向右腾跃）",lyric:"【唱】金箍一举妖魔惧，白骨原形露几分。",sub:"—— 一打",target:{x:70,y:55,leftArm:10,rightArm:-90,head:0,prop:-90},smoke:false},
+  {t:18000,cue:"二次化身 · 老妇人蹒跚走来（身体压低，左移）",lyric:"【唱】化作老妪泪涟涟，欲把唐僧引入偏。",sub:"—— 二化",target:{x:35,y:65,leftArm:30,rightArm:40,head:8,prop:20},smoke:true},
+  {t:24000,cue:"悟空再识 · （上前一挡，右手横出）",lyric:"【白】师父，莫要信她！",sub:"—— 二打",target:{x:58,y:48,leftArm:-15,rightArm:-60,head:0,prop:-50},smoke:false},
+  {t:30000,cue:"唐僧念紧箍咒 · （合掌低头，身体微颤）",lyric:"【念】嗡嘛呢叭咪吽……",sub:"—— 师父误会",target:{x:50,y:60,leftArm:55,rightArm:55,head:15,prop:30},smoke:false},
+  {t:36000,cue:"白骨精三化 · 白发老翁（身位右移，慢步）",lyric:"【唱】三化老翁持杖来，欲引师徒入迷局。",sub:"—— 三化",target:{x:62,y:55,leftArm:20,rightArm:25,head:-5,prop:10},smoke:true},
+  {t:42000,cue:"悟空定心神 · 高举金箍棒（右手极上抬，定格亮相）",lyric:"【白】师父且看，照妖镜下，终是白骨！",sub:"—— 三打",target:{x:50,y:45,leftArm:0,rightArm:-85,head:0,prop:-85},smoke:false},
+  {t:48000,cue:"妖影散去 · 皮影后退，烟雾升起",lyric:"【唱】千年白骨终归土，一念慈心一念魔。",sub:"—— 终局",target:{x:50,y:80,leftArm:40,rightArm:40,head:0,prop:0},smoke:true},
+  {t:55000,cue:"END",lyric:"—— 戏 终 ——",sub:"",target:null,smoke:false}
+];
+const SHOW_DURATION = 58000;
+
+/* ---------- 5. 全局状态 ---------- */
+const state = {
+  currentView:"home",
+  selectedRole:null,
+  workshopStep:"leather",   // leather | carving | coloring | jointing
+  workshop:{
+    carvedRegions:new Set(),
+    colors:{},
+    joints:{leftArm:0,rightArm:0,head:0},
+    leatherDone:false
+  },
+  cameraActive:false,
+  camStream:null,
+  performance:{
+    frames:[],         // {t,pose:{x,y,leftArm,rightArm,head,prop}}
+    startTs:0,
+    running:false,
+    score:0
+  },
+  livePose:{x:50,y:55,leftArm:20,rightArm:20,head:0,prop:0} // 实时姿态（演出时被输入更新）
+};
+
+/* ---------- 6. 路由 ---------- */
+function go(v){
+  document.querySelectorAll(".view").forEach(el=>el.classList.remove("active"));
+  const el=document.getElementById("view-"+v);
+  if(el)el.classList.add("active");
+  state.currentView=v;
+  if(v==="roles")renderRoles();
+  if(v==="workshop")initWorkshop();
+  if(v==="rehearsal")initRehearsal();
+  if(v==="stage"){/* startStageShow 由用户点击 */}
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---------- 7. 影窗首页的动态皮影 ---------- */
+(function initHomePuppet(){
+  const wrap=document.getElementById("homePuppet");
+  wrap.innerHTML=`<div style="position:absolute;left:50%;top:50%;width:55%;transform:translate(-50%,-50%);transition:transform 3s ease-in-out" id="homeFloat">${buildPuppetSVG("wukong")}</div>`;
+  const float=document.getElementById("homeFloat");
+  let dir=1;
+  setInterval(()=>{
+    dir*=-1;
+    float.style.transform=`translate(${dir*10}px,${-50+dir*3}%) scale(${0.9+dir*0.03})`;
+  },3000);
+})();
+
+/* ---------- 8. 角色选择渲染 ---------- */
+function renderRoles(){
+  const grid=document.getElementById("roleGrid");
+  grid.innerHTML="";
+  Object.entries(ROLES).forEach(([id,r])=>{
+    const card=document.createElement("div");
+    card.className="role-card";
+    card.innerHTML=`
+      <div>${buildPuppetSVG(id)}</div>
+      <h3 style="color:var(--gold);letter-spacing:.15em;margin-bottom:.3em">${r.name}</h3>
+      <div class="seal" style="font-size:.8rem;margin:.5em">难度 · ${r.difficulty}</div>
+      <p style="margin-top:.8em;font-size:.9rem;color:var(--smoke);line-height:1.8">${r.note}</p>
+      <p style="margin-top:.5em;font-size:.85rem;color:var(--gold)">主武器：${r.propName}</p>`;
+    card.onclick=()=>{
+      state.selectedRole=id;
+      grid.querySelectorAll(".role-card").forEach(c=>c.classList.remove("selected"));
+      card.classList.add("selected");
+      const btn=document.getElementById("confirmRoleBtn");
+      btn.disabled=false;btn.style.opacity=1;
+    };
+    grid.appendChild(card);
+  });
+}
+function confirmRole(){
+  if(!state.selectedRole){alert("请先选择一位角色");return}
+  go("workshop");
+}
+
+/* ---------- 9. 工坊页 · 四步动态 ---------- */
+const WORKSHOP_STEPS=[
+  {key:"leather",title:"① 制皮 · 绷展牛皮",short:"制皮"},
+  {key:"carving",title:"② 雕刻 · 镂花走刀",short:"雕刻"},
+  {key:"coloring",title:"③ 上色 · 敷彩点睛",short:"上色"},
+  {key:"jointing",title:"④ 装关节 · 缀结操纵",short:"装关节"}
+];
+const CULTURE_NOTES={
+  leather:`<h3>【 制 皮 · 第 一 步 】</h3>
+    <p>传统皮影制皮多选 <b>黄牛皮</b> 或 <b>驴皮</b>：浸泡三四日去毛，刮薄后绷于木框之上阴干。皮面须平整、透光、不起皱，方能承载后续雕刻。</p>
+    <p>请点击画布上的红点，模拟「按节奏绷展」—— 让牛皮在你手下，慢慢张成一张透明的画布。</p>`,
+  carving:`<h3>【 雕 刻 · 第 二 步 】</h3>
+    <p>皮影雕刻讲究 <b>推刀、拉刀、冲孔、针刺</b> 并用，一把"推刀"走天下。传统艺人一件影人常需 <b>三千余刀</b>，刀刀不可错。</p>
+    <p>请依次点击红色虚线路径，完成脸谱、衣纹、披饰的雕刻 —— 每一笔，都会永远留在你的皮影上。</p>`,
+  coloring:`<h3>【 敷 彩 · 第 三 步 】</h3>
+    <p>皮影上色采用 <b>矿物颜料</b>（朱砂、石青、石绿、藤黄、赭石、墨黑）。色彩浓淡由薄涂多层决定，谓之"晕染"。</p>
+    <p>请先选择色盘，再点击皮影上的任意色块区域 —— 你为它染的颜色，会在演出时真正呈现于灯影之下。</p>`,
+  jointing:`<h3>【 缀 结 · 第 四 步 】</h3>
+    <p>皮影以 <b>铜钉或丝线</b> 于肩、肘、颈、腰、膝等处串联关节，使每片皮料可独立转动。典型影人有 <b>11~13 个关节</b>，由两根操纵杆（主杆与手杆）驱动。</p>
+    <p>拖动红色圆点调整左/右肩、颈部转轴的初始角度 —— 你决定你的影人从怎样的姿态登场。</p>`
+};
+
+function initWorkshop(){
+  // 步骤条
+  const bar=document.getElementById("workshopSteps");
+  bar.innerHTML=WORKSHOP_STEPS.map(s=>`<div class="step ${s.key===state.workshopStep?"active":(isStepDone(s.key)?"done":"")}">${s.short}</div>`).join("");
+  renderWorkshop();
+  document.getElementById("cultureCard").innerHTML=CULTURE_NOTES[state.workshopStep];
+  document.getElementById("workshopTitle").textContent="— "+WORKSHOP_STEPS.find(s=>s.key===state.workshopStep).title+" —";
+  updateWorkshopButtons();
+}
+function isStepDone(k){
+  const idx=WORKSHOP_STEPS.findIndex(s=>s.key===k);
+  const curIdx=WORKSHOP_STEPS.findIndex(s=>s.key===state.workshopStep);
+  return idx<curIdx;
+}
+function updateWorkshopButtons(){
+  const idx=WORKSHOP_STEPS.findIndex(s=>s.key===state.workshopStep);
+  document.getElementById("prevStepBtn").style.visibility=idx===0?"hidden":"";
+  const next=document.getElementById("nextStepBtn");
+  next.textContent=idx===WORKSHOP_STEPS.length-1?"完成制作 · 进入排练 →":"下一步 →";
+}
+function nextWorkshopStep(){
+  const idx=WORKSHOP_STEPS.findIndex(s=>s.key===state.workshopStep);
+  if(idx<WORKSHOP_STEPS.length-1){
+    state.workshopStep=WORKSHOP_STEPS[idx+1].key;
+  }else{
+    stopCamera();
+    go("rehearsal");return;
+  }
+  initWorkshop();
+}
+function prevWorkshopStep(){
+  const idx=WORKSHOP_STEPS.findIndex(s=>s.key===state.workshopStep);
+  if(idx>0){state.workshopStep=WORKSHOP_STEPS[idx-1].key;initWorkshop()}
+}
+
+/* ----- 工坊画布核心渲染 ----- */
+function renderWorkshop(){
+  const canvas=document.getElementById("workbenchCanvas");
+  const side=document.getElementById("workshopSide");
+  const hint=document.getElementById("workshopHint");
+  const roleId=state.selectedRole||"wukong";
+
+  if(state.workshopStep==="leather"){
+    canvas.innerHTML=`<svg viewBox="0 0 400 300" id="leatherSvg">
+      <defs><radialGradient id="hide" cx="50%" cy="50%" r="60%">
+        <stop offset="0%" stop-color="#F4E5C0"/><stop offset="70%" stop-color="#C9B68C"/>
+        <stop offset="100%" stop-color="#7A2E18"/>
+      </radialGradient></defs>
+      <rect x="20" y="20" width="360" height="260" fill="url(#hide)" stroke="#3a2412" stroke-width="3"/>
+      <g id="tacks"></g>
+      <text x="200" y="160" text-anchor="middle" font-family="STKaiti" font-size="22" fill="#7A2E18" opacity=".45">牛 皮 · 待 绷</text>
+    </svg>`;
+    // 生成 12 个待点击的"绷钉点"
+    const pts=[];
+    for(let i=0;i<12;i++){
+      const a=Math.random()*Math.PI*2;
+      pts.push({x:200+Math.cos(a)*(80+Math.random()*90),y:150+Math.sin(a)*(60+Math.random()*70)});
+    }
+    const tacks=document.getElementById("tacks");
+    let remaining=pts.length;
+    pts.forEach((p,i)=>{
+      const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+      c.setAttribute("cx",p.x);c.setAttribute("cy",p.y);c.setAttribute("r",7);
+      c.setAttribute("fill","#B3261E");c.setAttribute("opacity",".8");
+      c.setAttribute("class","tack");
+      c.style.cursor="pointer";
+      c.onclick=()=>{c.setAttribute("fill","#3a2412");c.setAttribute("r","4");c.style.pointerEvents="none";remaining--;hint.textContent=`还剩 ${remaining} 处需绷展…`;if(remaining===0){hint.textContent="✓ 牛皮绷展完成！点击「下一步 →」进入雕刻。";state.workshop.leatherDone=true;updateWorkshopButtons()}};
+      tacks.appendChild(c);
+    });
+    hint.textContent="请依次点击画布上的红点（12处），模拟绷钉将牛皮张平。";
+    side.innerHTML=`<h3 style="color:var(--gold);margin-bottom:.6em">工艺要点</h3>
+      <p style="font-size:.9rem;line-height:1.9;color:var(--smoke)">· 选皮：黄牛皮最佳，约 3~5 岁<br/>· 浸泡：清水 3~4 日，去毛脱脂<br/>· 刮皮：往返 3 次，越刮越薄<br/>· 绷展：四角钉于木框，自然阴干</p>`;
+    return;
+  }
+
+  if(state.workshopStep==="carving"){
+    // 以角色皮影轮廓为底，在关键纹路上放置可点击路径
+    const regions=[
+      {id:"face",d:"M170 85 Q200 70 230 85 L235 120 Q200 135 165 120 Z"},
+      {id:"collar",d:"M155 130 Q200 120 245 130 L248 145 Q200 155 152 145 Z"},
+      {id:"sash",d:"M145 180 Q200 172 255 180 L255 195 Q200 205 145 195 Z"},
+      {id:"skirtL",d:"M150 210 L180 210 L175 260 L155 258 Z"},
+      {id:"skirtR",d:"M220 210 L250 210 L245 258 L225 260 Z"},
+      {id:"ornament",d:"M190 95 L210 95 L208 105 L192 105 Z"}
+    ];
+    canvas.innerHTML=`<svg viewBox="0 0 400 300" id="carveSvg">
+      <rect x="30" y="20" width="340" height="260" fill="#F4E5C0" stroke="#7A2E18" stroke-width="2"/>
+      ${regions.map(r=>`<path class="carve-hint" d="${r.d}" data-id="${r.id}"/>`).join("")}
+    </svg>`;
+    let remaining=regions.length;
+    canvas.querySelectorAll(".carve-hint").forEach(p=>{
+      p.style.cursor="pointer";
+      p.addEventListener("click",()=>{
+        const id=p.getAttribute("data-id");
+        if(state.workshop.carvedRegions.has(id))return;
+        state.workshop.carvedRegions.add(id);
+        p.setAttribute("stroke","#120B08");p.setAttribute("stroke-width","1.5");p.setAttribute("stroke-dasharray","0");
+        p.setAttribute("fill","rgba(18,11,8,.35)");p.classList.remove("carve-hint");
+        remaining--;
+        hint.textContent=`已雕刻 ${state.workshop.carvedRegions.size} / ${regions.length} 处，还剩 ${remaining} 处。`;
+        if(remaining===0){hint.textContent="✓ 雕刻完成！你的影人已拥有专属纹路。点击「下一步 →」上色。"}
+      });
+    });
+    hint.textContent=`请依次点击画布上的虚线路径进行雕刻（共 ${regions.length} 处）。`;
+    side.innerHTML=`<h3 style="color:var(--gold);margin-bottom:.6em">已雕刻</h3>
+      <p style="font-size:.9rem;color:var(--smoke);line-height:1.8" id="carveList">- 脸谱<br/>- 衣领<br/>- 腰带<br/>- 裙摆<br/>- 纹饰</p>`;
+    return;
+  }
+
+  if(state.workshopStep==="coloring"){
+    // 提供一个带色块分区的简化皮影，点击色块填色
+    canvas.innerHTML=`<svg viewBox="0 0 400 300" id="colorSvg">
+      <rect x="20" y="20" width="360" height="260" fill="#F4E5C0" stroke="#7A2E18" stroke-width="2"/>
+      <!-- 头 -->
+      <ellipse class="color-region" data-region="head" cx="200" cy="95" rx="32" ry="38" fill="#F4E5C0" stroke="#3a2412" stroke-width="1.5"/>
+      <!-- 脸谱 -->
+      <path class="color-region" data-region="face" d="M180 90 Q200 80 220 90 Q218 115 200 120 Q182 115 180 90 Z" fill="#E5CF95" stroke="#3a2412" stroke-width="1"/>
+      <!-- 身体 -->
+      <path class="color-region" data-region="body" d="M155 135 Q200 125 245 135 L255 245 Q200 265 145 245 Z" fill="#B3261E" stroke="#3a2412" stroke-width="1.5"/>
+      <!-- 腰带 -->
+      <path class="color-region" data-region="sash" d="M150 185 Q200 178 250 185 L252 200 Q200 210 148 200 Z" fill="#F4E5C0" stroke="#3a2412" stroke-width="1"/>
+      <!-- 道具/武器 -->
+      <rect class="color-region" data-region="prop" x="285" y="90" width="8" height="150" fill="#7A2E18" stroke="#120B08"/>
+    </svg>`;
+    hint.textContent="先在右侧选择色盘，再点击皮影上的区域（头/脸/身/腰带/道具）上色。";
+    side.innerHTML=`<h3 style="color:var(--gold);margin-bottom:.6em">色 盘</h3>
+      <div class="palette">${PALETTE.map((p,i)=>`<div class="swatch ${i===0?'active':''}" data-color="${p.color}" style="background:${p.color}" title="${p.name}"></div>`).join("")}</div>
+      <p class="muted" style="text-align:center;margin-top:.8em;font-size:.85rem">当前色：<span id="curColor">${PALETTE[0].name}（${PALETTE[0].color}）</span></p>
+      <p style="font-size:.85rem;color:var(--smoke);margin-top:1em;line-height:1.8">· 传统皮影上色采用"薄涂多层"的晕染法，避免一次过厚影响透光。<br/>· 朱砂辟邪、石青稳心、藤黄显富贵，配色即人物性格。</p>`;
+    // 绑定色盘点击
+    setTimeout(()=>{
+      let cur=PALETTE[0].color;
+      document.querySelectorAll(".swatch").forEach(s=>{
+        s.onclick=()=>{
+          document.querySelectorAll(".swatch").forEach(x=>x.classList.remove("active"));
+          s.classList.add("active");
+          cur=s.getAttribute("data-color");
+          const nm=PALETTE.find(p=>p.color===cur).name;
+          document.getElementById("curColor").textContent=`${nm}（${cur}）`;
+        };
+      });
+      document.querySelectorAll(".color-region").forEach(r=>{
+        r.onclick=()=>{
+          const key=r.getAttribute("data-region");
+          r.setAttribute("fill",cur);
+          state.workshop.colors[key]=cur;
+          const map={head:"头",face:"脸",body:"身",sash:"腰带",prop:"道具"};
+          hint.textContent=`已为「${map[key]}」上色。你的颜色选择将保留到之后的演出。`;
+        };
+      });
+    },0);
+    return;
+  }
+
+  if(state.workshopStep==="jointing"){
+    canvas.innerHTML=`<svg viewBox="0 0 400 300" id="jointSvg" style="cursor:grab">
+      <rect x="20" y="20" width="360" height="260" fill="#F4E5C0" stroke="#7A2E18" stroke-width="2"/>
+      ${buildPuppetSVG(state.selectedRole||"wukong",{colors:state.workshop.colors})}
+    </svg>`;
+    hint.textContent="拖动红色圆点（左肩关节、右肩关节、颈部），调整你的影人登场姿态。";
+    side.innerHTML=`<h3 style="color:var(--gold);margin-bottom:.6em">初始姿态</h3>
+      <p style="font-size:.9rem;line-height:1.9;color:var(--smoke);">· 左肩关节：<input type="range" min="-90" max="60" value="${state.workshop.joints.leftArm}" id="rLeft" style="width:100%"><br/>
+      · 右肩关节：<input type="range" min="-60" max="90" value="${state.workshop.joints.rightArm}" id="rRight" style="width:100%"><br/>
+      · 颈部：<input type="range" min="-25" max="25" value="${state.workshop.joints.head}" id="rHead" style="width:100%"><br/>
+      · 调整完成后，点击「下一步 →」进入排练。</p>`;
+    setTimeout(()=>{
+      const svg=document.getElementById("jointSvg");
+      function applyJoints(){
+        const la=svg.querySelector("#leftArm"),ra=svg.querySelector("#rightArm"),he=svg.querySelector("#head");
+        if(la)la.style.transform=`rotate(${state.workshop.joints.leftArm}deg)`;
+        if(ra)ra.style.transform=`rotate(${state.workshop.joints.rightArm}deg)`;
+        if(he)he.style.transform=`rotate(${state.workshop.joints.head}deg)`;
+      }
+      applyJoints();
+      document.getElementById("rLeft").oninput=e=>{state.workshop.joints.leftArm=+e.target.value;applyJoints()};
+      document.getElementById("rRight").oninput=e=>{state.workshop.joints.rightArm=+e.target.value;applyJoints()};
+      document.getElementById("rHead").oninput=e=>{state.workshop.joints.head=+e.target.value;applyJoints()};
+    },0);
+    return;
+  }
+}
+
+/* ---------- 10. 通用：以姿态数据更新 SVG 皮影 ---------- */
+function applyPoseTo(container,pose,opts={}){
+  const svg=container.querySelector("svg");
+  if(!svg)return;
+  // 身体位置（%）
+  container.style.position="absolute";
+  container.style.left=(pose.x-30)+"%";
+  container.style.top=(pose.y-35)+"%";
+  container.style.width="60%";
+  container.style.transition=opts.smooth?"transform .25s":"none";
+  const body=svg.querySelector("#body"),head=svg.querySelector("#head"),
+        la=svg.querySelector("#leftArm"),ra=svg.querySelector("#rightArm"),
+        prop=svg.querySelector("#prop"),rods=svg.querySelector("#rods");
+  if(body)body.style.transform=`rotate(${pose.bodyRot||0}deg)`;
+  if(head)head.style.transform=`rotate(${pose.head}deg)`;
+  if(la)la.style.transform=`rotate(${pose.leftArm}deg)`;
+  if(ra)ra.style.transform=`rotate(${pose.rightArm}deg)`;
+  if(prop)prop.style.transform=`rotate(${pose.prop}deg)`;
+  if(rods)rods.style.display=opts.showRods?"block":"none";
+}
+
+/* ---------- 11. 排练页：键鼠操纵 + 摄像头双手机制 ---------- */
+function initRehearsal(){
+  const wrap=document.getElementById("rehearsalPuppet");
+  wrap.innerHTML=buildPuppetSVG(state.selectedRole||"wukong",{colors:state.workshop.colors});
+  applyPoseTo(wrap,{x:50,y:55,...state.workshop.joints,prop:0});
+  // 动作提示列表
+  const ac=document.getElementById("actionList");
+  ac.innerHTML=SCRIPT.filter(s=>s.target).map((s,i)=>
+    `<p style="font-size:.9rem;line-height:1.9;color:var(--smoke);">${i+1}. ${s.cue.split("·")[0]}</p>`
+  ).join("");
+  // 鼓点指示（仅视觉）
+  const beats=document.getElementById("rehearsalBeats");
+  beats.innerHTML=Array.from({length:8},(_,i)=>`<div class="beat" data-i="${i}"></div>`).join("");
+  let idx=0;setInterval(()=>{
+    beats.querySelectorAll(".beat").forEach((b,j)=>b.classList.toggle("on",j===idx));
+    idx=(idx+1)%8;
+  },450);
+}
+
+/* ---------- 12. 键鼠输入：写入 livePose ---------- */
+(function bindInput(){
+  const mouse={x:50,y:55};
+  window.addEventListener("mousemove",e=>{
+    // 仅当处于排练/演出页时更新
+    if(state.currentView!=="rehearsal"&&state.currentView!=="stage")return;
+    const tgt=document.getElementById(state.currentView==="rehearsal"?"rehearsalStage":"stageStage");
+    if(!tgt)return;
+    const r=tgt.getBoundingClientRect();
+    mouse.x=((e.clientX-r.left)/r.width)*100;
+    mouse.y=((e.clientY-r.top)/r.height)*100;
+    state.livePose.x=Math.max(15,Math.min(85,mouse.x));
+    state.livePose.y=Math.max(25,Math.min(85,mouse.y));
+  });
+  window.addEventListener("keydown",e=>{
+    const p=state.livePose;
+    if(e.key==="a"||e.key==="A")p.leftArm=Math.max(-90,p.leftArm-8);
+    if(e.key==="d"||e.key==="D")p.leftArm=Math.min(60,p.leftArm+8);
+    if(e.key==="ArrowLeft")p.rightArm=Math.max(-90,p.rightArm-8);
+    if(e.key==="ArrowRight")p.rightArm=Math.min(60,p.rightArm+8);
+    if(e.key===" "){/* 定格：冻结当前姿态 */}
+  });
+  // 每帧把 livePose 反映到当前可见皮影
+  function tick(){
+    if(state.currentView==="rehearsal"){
+      const wrap=document.getElementById("rehearsalPuppet");
+      applyPoseTo(wrap,state.livePose,{showRods:true});
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ---------- 13. 摄像头双手识别（轻量肤色运动检测） ---------- */
+async function startCamera(){
+  try{
+    const video=document.getElementById("camVideo");
+    if(!video){alert("进入排练页后再开启摄像头");return}
+    const stream=await navigator.mediaDevices.getUserMedia({video:{width:320,height:200,facingMode:"user"}});
+    video.srcObject=stream;
+    state.camStream=stream;state.cameraActive=true;
+    const canvas=document.getElementById("camCanvas");
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    // 用小画布做块取样，检测画布左右两半高运动像素（亮度变化>阈值）
+    let prev=null;
+    function loop(){
+      if(state.cameraActive)requestAnimationFrame(loop);
+      if(video.readyState<2)return;
+      canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+      ctx.drawImage(video,0,0,canvas.width,canvas.height);
+      const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+      const d=img.data;
+      let lx=0,ly=0,lc=0,rx=0,ry=0,rc=0;
+      const halfW=canvas.width/2;
+      for(let y=0;y<canvas.height;y+=6){
+        for(let x=0;x<canvas.width;x+=6){
+          const i=(y*canvas.width+x)*4;
+          const r=d[i],g=d[i+1],b=d[i+2];
+          // 简单肤色：R>G>B 且 R>95
+          const skin=r>95&&r>g&&g>b?1:0;
+          // 结合亮度差（运动）
+          let motion=1;
+          if(prev){
+            const j=(y*canvas.width+x)*4;
+            motion=(Math.abs(prev[j]-r)+Math.abs(prev[j+1]-g)+Math.abs(prev[j+2]-b))>30?1:0;
+          }
+          if(skin||motion){
+            if(x<halfW){lx+=x;ly+=y;lc++}else{rx+=x;ry+=y;rc++}
+          }
+        }
+      }
+      prev=d;
+      // 映射到皮影：左手 -> leftArm 角度；右手 -> rightArm/身体
+      if(lc>50){
+        const lyN=ly/lc/canvas.height;
+        state.livePose.leftArm=Math.round((1-lyN)*100-40);
+      }
+      if(rc>50){
+        const rxN=rx/rc/canvas.width;
+        const ryN=ry/rc/canvas.height;
+        state.livePose.rightArm=Math.round((1-ryN)*120-50);
+        state.livePose.x=15+rxN*70;
+      }
+      // 在摄像头小画布上标出手点
+      ctx.fillStyle="#B3261E";
+      if(lc>50)ctx.fillRect(lx/lc-5,ly/lc-5,10,10);
+      if(rc>50){ctx.fillStyle="#D99A2B";ctx.fillRect(rx/rc-5,ry/rc-5,10,10)}
+    }
+    setTimeout(()=>{video.play();loop()},400);
+    document.getElementById("rehearsalCue")&&(document.getElementById("rehearsalCue").textContent="摄像头已启用：双手上下、左右移动以驱动皮影。");
+  }catch(err){
+    alert("摄像头不可用。已自动降级为键盘/鼠标：鼠标控制位置，A/D 控制左臂，←/→ 控制右臂。");
+  }
+}
+function stopCamera(){
+  if(state.camStream){state.camStream.getTracks().forEach(t=>t.stop());state.camStream=null}
+  state.cameraActive=false;
+}
+
+/* ---------- 14. 演出页：剧本时间轴 + 记录 ---------- */
+function initStage(){
+  const wrap=document.getElementById("stagePuppet");
+  wrap.innerHTML=buildPuppetSVG(state.selectedRole||"wukong",{colors:state.workshop.colors});
+  applyPoseTo(wrap,{x:50,y:55,...state.workshop.joints,prop:0},{showRods:true});
+}
+let stageTimer=null,stageStart=0;
+function startStageShow(){
+  if(state.performance.running){alert("正在演出……");return}
+  state.performance.running=true;
+  state.performance.frames=[];
+  stageStart=performance.now();
+  const btn=document.getElementById("startStageBtn");
+  btn.style.opacity=".5";btn.textContent="演 出 中……";
+  const cueEl=document.getElementById("stageCue");
+  const lyricEl=document.getElementById("stageLyric");
+  const timelineEl=document.getElementById("stageTimeline");
+  const puppet=document.getElementById("stagePuppet");
+  const smokeEl=document.getElementById("stageSmoke");
+  function loop(){
+    if(!state.performance.running)return;
+    const t=performance.now()-stageStart;
+    // 命中最近一条 cue
+    let cur=SCRIPT[0];
+    for(const s of SCRIPT){if(t>=s.t)cur=s;else break}
+    cueEl.textContent=cur.cue;
+    lyricEl.innerHTML=`<span>${cur.lyric}</span><small>${cur.sub||""}</small>`;
+    timelineEl.style.width=Math.min(100,(t/SHOW_DURATION)*100)+"%";
+    if(cur.smoke){smokeEl.classList.add("on")}else{smokeEl.classList.remove("on")}
+    // 记录当前用户操作姿态
+    state.performance.frames.push({t:+t.toFixed(0),pose:{
+      x:+state.livePose.x.toFixed(1),y:+state.livePose.y.toFixed(1),
+      leftArm:state.livePose.leftArm,rightArm:state.livePose.rightArm,
+      head:state.workshop.joints.head+Math.round(Math.sin(t/700)*3),
+      prop:state.livePose.rightArm
+    }});
+    applyPoseTo(puppet,state.livePose,{showRods:true,smooth:true});
+    if(t>=SHOW_DURATION){
+      state.performance.running=false;
+      btn.style.opacity="";btn.textContent="✦ 再 演 一 次 ✦";
+      // 计算得分：动作与剧本目标姿态的偏差越小分数越高
+      computeScore();
+      // 自动转入回放
+      go("replay");startReplay();
+      return;
+    }
+    stageTimer=requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+function computeScore(){
+  // 基于帧与最近 cue.target 的距离
+  let sum=0,n=0;
+  for(const f of state.performance.frames){
+    let tgt=null;
+    for(const s of SCRIPT){if(s.target&&f.t>=s.t)tgt=s.target}
+    if(!tgt)continue;
+    const p=f.pose;
+    const d=Math.abs(p.x-tgt.x)+Math.abs(p.y-tgt.y)+
+            Math.abs(p.leftArm-tgt.leftArm)+Math.abs(p.rightArm-tgt.rightArm);
+    sum+=d;n++;
+  }
+  const avg=n?sum/n:80;
+  const score=Math.max(55,Math.min(100,100-Math.round(avg/1.5)));
+  state.performance.score=score;
+}
+
+/* ---------- 15. 幕前回放：基于记录帧插值重现 + 灯影下无操纵杆 ---------- */
+let replayTimer=null;
+function startReplay(){
+  const wrap=document.getElementById("replayPuppet");
+  wrap.innerHTML=buildPuppetSVG(state.selectedRole||"wukong",{colors:state.workshop.colors});
+  // 应用初始姿态
+  applyPoseTo(wrap,{x:50,y:55,...state.workshop.joints,prop:0},{showRods:false});
+  const scoreEl=document.getElementById("replayScore");
+  const comEl=document.getElementById("replayComment");
+  scoreEl.textContent=state.performance.score+" 分";
+  const tiers=[[92,"天人之影 —— 操纵娴熟，节奏极佳。"],[85,"匠心之影 —— 动作合度，细节可圈。"],[75,"匠人之影 —— 已初具韵味，再练几番更佳。"],[65,"学徒之影 —— 皮影已随你心动，只是节奏需再磨。"],[0,"初心之影 —— 哪怕笨拙，这也是你独一无二的一场戏。"]];
+  comEl.textContent=tiers.find(t=>state.performance.score>=t[0])[1];
+  const frames=state.performance.frames;
+  if(!frames||frames.length<2){comEl.textContent="（无记录，直接展示标准剧本剪影）"};
+  const lyricEl=document.getElementById("replayLyric");
+  const smokeEl=document.getElementById("replaySmoke");
+  const timelineEl=document.getElementById("replayTimeline");
+  const t0=performance.now();
+  function loop(){
+    const t=performance.now()-t0;
+    if(t>=SHOW_DURATION){return}
+    timelineEl.style.width=(t/SHOW_DURATION*100).toFixed(1)+"%";
+    // 找到包围 t 的两帧做线性插值
+    let pose=null;
+    if(frames&&frames.length>=2){
+      let lo=0,hi=frames.length-1;
+      while(lo<hi){const m=(lo+hi+1)>>1;if(frames[m].t<=t)lo=m;else hi=m-1}
+      const a=frames[lo],b=frames[lo+1]||a;
+      const k=b.t>a.t?(t-a.t)/(b.t-a.t):1;
+      pose={
+        x:a.pose.x+(b.pose.x-a.pose.x)*k,
+        y:a.pose.y+(b.pose.y-a.pose.y)*k,
+        leftArm:a.pose.leftArm+(b.pose.leftArm-a.pose.leftArm)*k,
+        rightArm:a.pose.rightArm+(b.pose.rightArm-a.pose.rightArm)*k,
+        head:a.pose.head+(b.pose.head-a.pose.head)*k,
+        prop:a.pose.prop+(b.pose.prop-a.pose.prop)*k
+      };
+    }
+    // 唱词
+    let cur=SCRIPT[0];
+    for(const s of SCRIPT){if(t>=s.t)cur=s;else break}
+    lyricEl.innerHTML=`<span>${cur.lyric}</span><small>${cur.sub||""}</small>`;
+    if(cur.smoke)smokeEl.classList.add("on");else smokeEl.classList.remove("on");
+    if(pose)applyPoseTo(wrap,pose,{showRods:false,smooth:true});
+    replayTimer=requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+function replayAgain(){cancelAnimationFrame(replayTimer);startReplay()}
+
+/* ---------- 16. 幕后/幕前切换：隐藏操纵杆 + 加强灯光（模拟台下观众视角） ---------- */
+function toggleFrontBack(){
+  const rods=document.querySelectorAll("#stagePuppet #rods");
+  const nowHidden=rods.length>0&&rods[0].style.display==="none";
+  rods.forEach(r=>{r.style.display=nowHidden?"block":"none"});
+  const btn=document.getElementById("frontBackBtn");
+  if(btn)btn.textContent=nowHidden?"切 换 到 幕 前 视 角":"切 换 到 幕 后 视 角";
+}
+
+/* ---------- 17. 片尾感动文案 ---------- */
+function startCredits(){
+  const name=(ROLES[state.selectedRole]||ROLES.wukong).name;
+  document.getElementById("creditLine1").innerHTML=
+    `你刚刚演完了 ${name} 的一场戏。<br/>从一张牛皮，到你手中操纵的影子，<br/>它穿过了千年的戏台，也穿过了你此刻的呼吸。`;
+  document.getElementById("creditLine2").innerHTML=
+    `皮影戏不是"被观看"的艺术，<br/>它是"被你亲手演出来"的故事。<br/>愿你记住这一次手腕的温度，<br/>愿非遗在你手里，继续活下去。`;
+}
+function resetAll(){
+  state.selectedRole=null;state.workshopStep="leather";
+  state.workshop.carvedRegions.clear();state.workshop.colors={};
+  state.workshop.joints={leftArm:0,rightArm:0,head:0};
+  state.performance.frames=[];state.performance.score=0;
+  stopCamera();
+  go("home");
+}
+
+/* ---------- 18. 初始化 ---------- */
+window.addEventListener("load",()=>{
+  // 保留默认 home 视图初始化
+});
+</script>
+</body>
+</html>
