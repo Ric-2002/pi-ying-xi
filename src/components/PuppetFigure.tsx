@@ -5,13 +5,15 @@ interface PuppetFigureProps {
   pose: PuppetPoseData;
   colors: Record<string, string>;
   isFrontView?: boolean;
+  /** 皮影本体透明度（0~1），不影响容器背景和边框。用于工坊制作过程的渐现效果。*/
+  puppetOpacity?: number;
 }
 
 /**
  * 用 SVG 分层模拟皮影影偶，便于将手势姿态映射到身体、头部、手臂与道具。
  */
-export function PuppetFigure({ role, pose, colors, isFrontView = false }: PuppetFigureProps) {
-  const opacity = isFrontView ? 0.78 : 0.92;
+export function PuppetFigure({ role, pose, colors, isFrontView = false, puppetOpacity }: PuppetFigureProps) {
+  const opacity = puppetOpacity ?? (isFrontView ? 0.78 : 0.92);
 
   return (
     <div className="relative h-full min-h-[360px] w-full overflow-hidden rounded-[2rem] border border-[#D99A2B]/20 bg-[#F4E5C0]/90 shadow-[inset_0_0_80px_rgba(122,46,24,0.18)]">
@@ -31,6 +33,7 @@ export function PuppetFigure({ role, pose, colors, isFrontView = false }: Puppet
             transform: `translate(${pose.body.x - 50}px, ${pose.body.y - 58}px) rotate(${pose.body.rotation}deg)`,
             transformOrigin: "50px 58px",
             opacity,
+            transition: "opacity 0.4s ease",
           }}
           filter="url(#puppet-shadow)"
         >

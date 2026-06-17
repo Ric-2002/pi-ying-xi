@@ -40,6 +40,8 @@ export interface ScriptActionData {
   scene: string;
   cueText: string;
   instruction: string;
+  lyric: string;
+  smoke: boolean;
   targetPose: PuppetPoseData;
   tolerance: number;
 }
