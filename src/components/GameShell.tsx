@@ -12,12 +12,14 @@ const navItems = [
 
 interface GameShellProps {
   children: React.ReactNode;
+  /** 首页隐藏 header CTA，避免与 hero 区 CTA 重复 */
+  hideHeaderCta?: boolean;
 }
 
 /**
  * 提供统一戏台框架，让不同页面共享非遗皮影的幕布、灯影和导航氛围。
  */
-export function GameShell({ children }: GameShellProps) {
+export function GameShell({ children, hideHeaderCta = false }: GameShellProps) {
   return (
     <div className="min-h-screen overflow-hidden bg-[#120B08] text-[#F4E5C0]">
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(217,154,43,0.24),transparent_38%),linear-gradient(120deg,rgba(122,46,24,0.34),transparent_40%,rgba(29,111,122,0.16))]" />
@@ -53,12 +55,14 @@ export function GameShell({ children }: GameShellProps) {
               );
             })}
           </nav>
-          <Link
-            to="/roles"
-            className="hidden rounded-full bg-[#D99A2B] px-5 py-2 text-sm font-semibold text-[#120B08] shadow-[0_12px_40px_rgba(217,154,43,0.28)] transition hover:-translate-y-0.5 hover:bg-[#F1B64B] md:inline-flex"
-          >
-            开始制影
-          </Link>
+          {!hideHeaderCta && (
+            <Link
+              to="/roles"
+              className="hidden rounded-full bg-[#D99A2B] px-5 py-2 text-sm font-semibold text-[#120B08] shadow-[0_12px_40px_rgba(217,154,43,0.28)] transition hover:-translate-y-0.5 hover:bg-[#F1B64B] md:inline-flex"
+            >
+              开始制影
+            </Link>
+          )}
         </div>
       </header>
       <main className="relative z-10 mx-auto max-w-7xl px-6 py-8">{children}</main>
