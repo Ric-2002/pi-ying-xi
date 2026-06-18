@@ -30,7 +30,7 @@ export interface PuppetAsset {
   roleId: RoleId;
 
   leather: {
-    /** 0~1,通透度;默认 0.7(乱点也能拿到的最低值) */
+    /** 0~1,通透度;由制皮小游戏产出(下限 0.7)。空 asset 初始为 0。 */
     translucency: number;
   };
 
@@ -51,30 +51,30 @@ export interface PuppetAsset {
   };
 }
 
-export const CARVE_REGION_IDS: CarveRegionId[] = [
+export const CARVE_REGION_IDS = [
   "face",
   "collar",
   "sash",
   "skirtL",
   "skirtR",
   "ornament",
-];
+] as const satisfies readonly CarveRegionId[];
 
-export const COLOR_REGION_IDS: ColorRegionId[] = [
+export const COLOR_REGION_IDS = [
   "head",
   "face",
   "robe",
   "sash",
   "prop",
-];
+] as const satisfies readonly ColorRegionId[];
 
-export const JOINT_IDS: JointId[] = [
+export const JOINT_IDS = [
   "head",
   "leftArm",
   "rightArm",
   "leftLeg",
   "rightLeg",
-];
+] as const satisfies readonly JointId[];
 
 /** 雕刻 overallQuality 的 region 权重(纹饰最高,腰带最低) */
 export const CARVE_WEIGHTS: Record<CarveRegionId, number> = {
@@ -88,10 +88,12 @@ export const CARVE_WEIGHTS: Record<CarveRegionId, number> = {
 
 /** 默认空 asset 工厂 */
 export function createEmptyPuppet(roleId: RoleId): PuppetAsset {
+  // Object.fromEntries widens to Record<string, …>; keys are typed CarveRegionId so the narrowing is sound.
   const carveRegions = Object.fromEntries(
     CARVE_REGION_IDS.map((id) => [id, { carved: false, quality: 0 }]),
   ) as Record<CarveRegionId, CarveRegionState>;
 
+  // Object.fromEntries widens to Record<string, …>; keys are typed JointId so the narrowing is sound.
   const jointPieces = Object.fromEntries(
     JOINT_IDS.map((id) => [id, { offsetPx: 0 }]),
   ) as Record<JointId, JointPieceState>;
