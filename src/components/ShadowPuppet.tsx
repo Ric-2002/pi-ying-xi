@@ -58,7 +58,6 @@ export function ShadowPuppet({
             key={id}
             d={CARVE_PATHS[id]}
             fill="#1a0e08"
-            opacity={0.85}
           />
         );
       }
@@ -199,6 +198,8 @@ export function ShadowPuppet({
           {/* Layer 4 实际由 Layer 2 的 fill 已经完成,这里留空 */}
 
           {/* Layer 5: 关节 / 姿态 */}
+          {/* Head pose wrapper — placeholder for future Layer 4 (head rotation/jitter).
+              Currently a no-op because head visuals are drawn in Layer 2 above. */}
           <g
             style={{
               transform: `rotate(${safe.head.rotation}deg) translate(${jitterFor(
