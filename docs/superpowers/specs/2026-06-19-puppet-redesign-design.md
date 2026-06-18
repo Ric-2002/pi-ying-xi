@@ -53,6 +53,8 @@
 
 ```ts
 // src/types/puppet.ts (新建)
+import type { RoleId } from './game';   // 已存在的角色 id 联合类型
+
 export type Grade = '下乘' | '中乘' | '上乘' | '神品';
 
 export type CarveRegionId = 'face' | 'collar' | 'sash' | 'skirtL' | 'skirtR' | 'ornament';
@@ -150,10 +152,13 @@ interface GameState {
   activePerformance?: PerformanceData;
 
   initPuppet: (roleId: RoleId) => void;
-  updateLeather: (patch: Partial<PuppetAsset['leather']>) => void;
-  updateCarving: (patch: Partial<PuppetAsset['carving']>) => void;
+  // mutator 接受细粒度 patch,内部对嵌套结构做深合并
+  setLeatherTranslucency: (translucency: number) => void;
+  setCarveRegion: (id: CarveRegionId, data: { carved: boolean; quality: number }) => void;
+  recomputeCarvingGrade: () => void;                         // 在 setCarveRegion 之后调用,重算 overallQuality + grade
   updateColoring: (region: ColorRegionId, color: string) => void;
-  updateJoints: (patch: Partial<PuppetAsset['joints']>) => void;
+  setJointPiece: (id: JointId, offsetPx: number) => void;
+  recomputeJointsGrade: () => void;                          // 同上
   setPose: (pose: PuppetPoseData) => void;
   resetPuppet: () => void;
 }
@@ -204,7 +209,7 @@ carving.grade = qualityToGrade(overallQuality)
 **交互流程**：
 
 1. 工坊装关节步骤进入，工作台中央是已上色的影偶躯干（没有头、没有四肢）
-2. 周围散布 4~5 个待装部件：头、左臂、右臂、左腿、右腿
+2. 周围散布 5 个待装部件：头、左臂、右臂、左腿、右腿
 3. 每个部件上有一个铜钉（发亮金色圆点），躯干上对应位置有一个穿孔（深色圆环）
 4. 玩家拖动部件，把铜钉对准穿孔——但是：
    - 穿孔位置会轻微飘移（±3 px，模拟手抖，像现实中皮料柔软晃动）
