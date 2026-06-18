@@ -59,10 +59,3 @@ export interface PerformanceData {
   score: number;
   frames: PerformanceFrameData[];
 }
-
-export interface PuppetProgressData {
-  roleId: RoleId;
-  completedSteps: WorkshopStep[];
-  colors: Record<string, string>;
-  jointQuality: number;
-}
