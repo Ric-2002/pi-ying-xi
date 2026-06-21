@@ -7,8 +7,9 @@ import { ShadowPuppet } from "@/components/ShadowPuppet";
 import { roles, workshopSteps, defaultPose } from "@/data/gameData";
 import { cn } from "@/lib/utils";
 import { useGameStore, useWorkshopProgress } from "@/store/gameStore";
-import { createEmptyPuppet, JOINT_IDS } from "@/types/puppet";
+import { createEmptyPuppet } from "@/types/puppet";
 import { CarvingGame } from "./workshop/games/CarvingGame";
+import { JointingGame } from "./workshop/games/JointingGame";
 import type { RoleId } from "@/types/game";
 
 export function WorkshopPage() {
@@ -17,8 +18,6 @@ export function WorkshopPage() {
   const initPuppet = useGameStore((state) => state.initPuppet);
   const setLeather = useGameStore((state) => state.setLeatherTranslucency);
   const updateColoring = useGameStore((state) => state.updateColoring);
-  const setJointPiece = useGameStore((state) => state.setJointPiece);
-  const recomputeJoints = useGameStore((state) => state.recomputeJointsGrade);
   const progress = useWorkshopProgress();
 
   const roleIdFromUrl = (params.roleId as RoleId | undefined) ?? "wukong";
@@ -50,13 +49,6 @@ export function WorkshopPage() {
     updateColoring("face", "#F4E5C0");
     updateColoring("sash", "#D99A2B");
   }, [role, updateColoring]);
-
-  const handleJointAllPerfect = useCallback(() => {
-    for (const id of JOINT_IDS) {
-      setJointPiece(id, 0);
-    }
-    recomputeJoints();
-  }, [setJointPiece, recomputeJoints]);
 
   const allDone = progress.completedCount >= 4;
 
@@ -152,13 +144,7 @@ export function WorkshopPage() {
                       </button>
                     )}
                     {step.id === "jointing" && (
-                      <button
-                        type="button"
-                        onClick={handleJointAllPerfect}
-                        className="rounded-full bg-[#D99A2B] px-4 py-2 text-sm font-semibold text-[#120B08]"
-                      >
-                        (M1 占位)一键完成装关节
-                      </button>
+                      <JointingGame onAllDone={(grade) => { void grade; }} />
                     )}
                   </div>
                 )}
