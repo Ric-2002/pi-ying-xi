@@ -1,5 +1,6 @@
 // src/store/gameStore.ts
 import { create } from "zustand";
+import { useShallow } from "zustand/react/shallow";
 import { persist } from "zustand/middleware";
 import { defaultPose } from "@/data/gameData";
 import { qualityToGrade } from "@/data/grading";
@@ -226,29 +227,42 @@ export const useGameStore = create<GameState>()(
  *   game requires user-driven recomputes which preserves the intended semantics.
  */
 export function useWorkshopProgress(): WorkshopProgress {
-  return useGameStore((state) => {
-    const p = state.puppet;
-    if (!p) {
-      return {
-        leather: false,
-        carving: false,
-        coloring: false,
-        jointing: false,
-        completedCount: 0,
-        activeStep: "leather",
-      };
-    }
-    const leather = p.leather.translucency > 0;
-    const carving = CARVE_REGION_IDS.some((id) => p.carving.regions[id].carved);
-    const coloring = Object.values(p.coloring).every((c) => c !== "");
-    // jointing 完成 = recomputeJointsGrade 已被调用过(overallQuality 在 createEmptyPuppet 中初始化为 0)
-    const jointing = p.joints.overallQuality > 0;
+  // useShallow ensures the returned object is compared field-by-field, not by
+  // reference — otherwise Zustand 5 re-renders every store change and the
+  // fresh object literal trips React's "getSnapshot should be cached" loop
+  // detector, ultimately crashing with "Maximum update depth exceeded".
+  return useGameStore(
+    useShallow((state) => {
+      const p = state.puppet;
+      if (!p) {
+        return {
+          leather: false,
+          carving: false,
+          coloring: false,
+          jointing: false,
+          completedCount: 0,
+          activeStep: "leather" as WorkshopStep,
+        };
+      }
+      const leather = p.leather.translucency > 0;
+      const carving = CARVE_REGION_IDS.some(
+        (id) => p.carving.regions[id].carved,
+      );
+      const coloring = Object.values(p.coloring).every((c) => c !== "");
+      // jointing 完成 = recomputeJointsGrade 已被调用过(overallQuality 在 createEmptyPuppet 中初始化为 0)
+      const jointing = p.joints.overallQuality > 0;
 
-    const flags = { leather, carving, coloring, jointing };
-    const order: WorkshopStep[] = ["leather", "carving", "coloring", "jointing"];
-    const activeStep = order.find((s) => !flags[s]) ?? "jointing";
-    const completedCount = Object.values(flags).filter(Boolean).length;
+      const flags = { leather, carving, coloring, jointing };
+      const order: WorkshopStep[] = [
+        "leather",
+        "carving",
+        "coloring",
+        "jointing",
+      ];
+      const activeStep = order.find((s) => !flags[s]) ?? "jointing";
+      const completedCount = Object.values(flags).filter(Boolean).length;
 
-    return { ...flags, completedCount, activeStep };
-  });
+      return { ...flags, completedCount, activeStep };
+    }),
+  );
 }
