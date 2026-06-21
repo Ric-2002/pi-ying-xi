@@ -22,3 +22,7 @@ npm run dev
 ```bash
 npm run build
 ```
+
+## 数据迁移
+
+项目目前处于 demo 阶段。重大架构升级(如 v0 → v2:从 `colors`/`jointQuality` 迁移到 `PuppetAsset`)采用**清空 localStorage** 的方式不向下兼容。如果之前玩过旧版本,首次打开新版会自动从空状态开始(zustand persist `version: 2` + `migrate` 钩子)。
