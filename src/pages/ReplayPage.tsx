@@ -4,6 +4,7 @@ import { Home, Play, RotateCcw } from "lucide-react";
 import { GameShell } from "@/components/GameShell";
 import { ShadowPuppet } from "@/components/ShadowPuppet";
 import { roles } from "@/data/gameData";
+import { GRADE_META } from "@/data/grading";
 import { useReplayAnimation } from "@/hooks/useReplayAnimation";
 import { useGameStore } from "@/store/gameStore";
 import { createEmptyPuppet } from "@/types/puppet";
@@ -127,6 +128,30 @@ export function ReplayPage() {
             <p className="mt-2 text-sm leading-6 text-[#F4E5C0]/70">
               {tier.comment}
             </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-[#F4E5C0]/10 bg-[#F4E5C0]/5 p-6">
+            <p className="text-sm text-[#F4E5C0]/58">你这具影人</p>
+            <div className="mt-3 grid gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-[#F4E5C0]/70">雕刻</span>
+                <span
+                  className="font-serif text-lg"
+                  style={{ color: GRADE_META[asset.carving.grade].color }}
+                >
+                  {asset.carving.grade}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-[#F4E5C0]/70">关节</span>
+                <span
+                  className="font-serif text-lg"
+                  style={{ color: GRADE_META[asset.joints.grade].color }}
+                >
+                  {asset.joints.grade}
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="rounded-[2rem] border border-[#F4E5C0]/10 bg-[#F4E5C0]/5 p-6">

@@ -107,11 +107,11 @@ export function createEmptyPuppet(roleId: RoleId): PuppetAsset {
       grade: "下乘",
     },
     coloring: {
-      head: "#F4E5C0",
-      face: "#F4E5C0",
-      robe: "#C0442D",
-      sash: "#D99A2B",
-      prop: "#7A2E18",
+      head: "",
+      face: "",
+      robe: "",
+      sash: "",
+      prop: "",
     },
     joints: {
       pieces: jointPieces,

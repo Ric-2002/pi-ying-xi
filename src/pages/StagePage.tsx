@@ -23,6 +23,23 @@ export function StagePage() {
   const role = roles.find((item) => item.id === roleId) ?? roles[0];
   const asset = puppet ?? createEmptyPuppet(roleId);
 
+  const carvingGrade = puppet?.carving.grade ?? "下乘";
+  const jointsGrade = puppet?.joints.grade ?? "下乘";
+  const isShenpin = carvingGrade === "神品" && jointsGrade === "神品";
+
+  const [shenpinStarting, setShenpinStarting] = useState(false);
+  const handleStart = () => {
+    if (!isRunning && isShenpin) {
+      setShenpinStarting(true);
+      setTimeout(() => {
+        setShenpinStarting(false);
+        setIsRunning(true);
+      }, 1000);
+    } else {
+      setIsRunning((v) => !v);
+    }
+  };
+
   const controls = usePuppetControls();
   const [isRunning, setIsRunning] = useState(false);
   const [isFrontView, setIsFrontView] = useState(false);
@@ -100,7 +117,7 @@ export function StagePage() {
               </button>
               <button
                 type="button"
-                onClick={() => setIsRunning((v) => !v)}
+                onClick={handleStart}
                 className="inline-flex items-center gap-2 rounded-full bg-[#D99A2B] px-5 py-3 text-sm font-semibold text-[#120B08] transition hover:-translate-y-0.5"
               >
                 {isRunning ? (
@@ -149,6 +166,16 @@ export function StagePage() {
                   </p>
                 </div>
               </div>
+            )}
+
+            {shenpinStarting && (
+              <div
+                className="pointer-events-none absolute inset-0 rounded-[2rem] animate-pulse"
+                style={{
+                  boxShadow:
+                    "inset 0 0 80px 20px rgba(217,154,43,0.45), 0 0 60px 10px rgba(217,154,43,0.35)",
+                }}
+              />
             )}
           </div>
 

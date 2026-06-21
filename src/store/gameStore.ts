@@ -218,10 +218,8 @@ export const useGameStore = create<GameState>()(
  * Workshop step completion derived from puppet state.
  *
  * Known M1 limitations (intentional, fixed by later tasks):
- * - `coloring` flag flips true at puppet init because `createEmptyPuppet` populates
- *   default hex values for all regions. Will be addressed in Task 14/15 when
- *   `createEmptyPuppet` defaults move to empty strings (with ShadowPuppet fallbacks
- *   filling in defaults at render time).
+ * - `coloring` 现在严格判定: 必须 5 个 region 都被赋予非空颜色才视为完成。
+ *   `createEmptyPuppet` 默认 hex 为空串, ShadowPuppet 在渲染时兜底空串到默认颜色。
  * - `jointing` flips true the first time `recomputeJointsGrade` runs even with all
  *   offsetPx=0 (perfect assembly produces overallQuality=1). M1 placeholder triggers
  *   it via the "一键完成装关节" button so the flow works; Task 13's real assembly
@@ -242,9 +240,7 @@ export function useWorkshopProgress(): WorkshopProgress {
     }
     const leather = p.leather.translucency > 0;
     const carving = CARVE_REGION_IDS.some((id) => p.carving.regions[id].carved);
-    const coloring = Object.values(p.coloring).some(
-      (c) => c !== "" && c != null,
-    );
+    const coloring = Object.values(p.coloring).every((c) => c !== "");
     // jointing 完成 = recomputeJointsGrade 已被调用过(overallQuality 在 createEmptyPuppet 中初始化为 0)
     const jointing = p.joints.overallQuality > 0;
 

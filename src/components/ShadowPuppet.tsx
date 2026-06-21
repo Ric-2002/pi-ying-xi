@@ -176,7 +176,7 @@ export function ShadowPuppet({
           {/* Layer 2: 上色 — 用 coloring 填充躯干 */}
           <path
             d={geometry.torso.d}
-            fill={asset.coloring.robe}
+            fill={asset.coloring.robe || "#C0442D"}
             stroke="#3A302A"
             strokeWidth="1.5"
             opacity={0.92}
@@ -186,7 +186,7 @@ export function ShadowPuppet({
             cy={geometry.head.cy}
             rx={geometry.head.rx}
             ry={geometry.head.ry}
-            fill={asset.coloring.face}
+            fill={asset.coloring.face || "#F4E5C0"}
             stroke="#3A302A"
             strokeWidth="1.2"
           />
@@ -218,7 +218,7 @@ export function ShadowPuppet({
           >
             <path
               d={`M${geometry.leftArmAnchor.x} ${geometry.leftArmAnchor.y} C31 44 25 51 23 61`}
-              stroke={asset.coloring.robe}
+              stroke={asset.coloring.robe || "#C0442D"}
               strokeWidth="5.5"
               strokeLinecap="round"
               fill="none"
@@ -242,7 +242,7 @@ export function ShadowPuppet({
           >
             <path
               d={`M${geometry.rightArmAnchor.x} ${geometry.rightArmAnchor.y} C70 44 76 51 78 61`}
-              stroke={asset.coloring.prop}
+              stroke={asset.coloring.prop || "#7A2E18"}
               strokeWidth="5.5"
               strokeLinecap="round"
               fill="none"
@@ -268,7 +268,7 @@ export function ShadowPuppet({
               y1="28"
               x2="76"
               y2="80"
-              stroke={asset.coloring.prop}
+              stroke={asset.coloring.prop || "#7A2E18"}
               strokeWidth="2.4"
               strokeLinecap="round"
             />
