@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { GameShell } from "@/components/GameShell";
 import { ProgressRail } from "@/components/ProgressRail";
 import { workshopSteps } from "@/data/gameData";
-import { useGameStore } from "@/store/gameStore";
+import { useWorkshopProgress } from "@/store/gameStore";
 
 // 孙悟空 SVG 皮影剪影 — 头冠 + 面谱 + 金箍棒轮廓
 function WukongSilhouette() {
@@ -363,8 +363,8 @@ function WorkshopNarrative() {
 }
 
 export default function Home() {
-  const completedSteps = useGameStore((state) => state.completedSteps);
-  const hasProgress = completedSteps.length > 0;
+  const progress = useWorkshopProgress();
+  const hasProgress = progress.completedCount > 0;
   const location = useLocation();
 
   return (
@@ -460,7 +460,7 @@ export default function Home() {
       {/* ── 制影进度（仅回访用户显示） ── */}
       {hasProgress && (
         <div className="mt-10">
-          <ProgressRail completedSteps={completedSteps} />
+          <ProgressRail progress={progress} />
         </div>
       )}
 
