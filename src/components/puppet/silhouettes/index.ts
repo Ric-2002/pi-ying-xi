@@ -2,6 +2,14 @@
 import type { ComponentType } from "react";
 import type { RoleId } from "@/types/game";
 import { COMMON_GEOMETRY, CommonSilhouette } from "./CommonSilhouette";
+import { WUKONG_GEOMETRY, WukongSilhouette } from "./WukongSilhouette";
+import { TANGSENG_GEOMETRY, TangsengSilhouette } from "./TangsengSilhouette";
+import {
+  BAIGUJING_GEOMETRY,
+  BaigujingSilhouette,
+} from "./BaigujingSilhouette";
+import { BAJIE_GEOMETRY, BajieSilhouette } from "./BajieSilhouette";
+import { SHASENG_GEOMETRY, ShasengSilhouette } from "./ShasengSilhouette";
 import type { SilhouetteGeometry } from "./CommonSilhouette";
 
 export interface SilhouetteEntry {
@@ -10,14 +18,15 @@ export interface SilhouetteEntry {
 }
 
 const REGISTRY: Record<RoleId, SilhouetteEntry> = {
-  wukong: { Component: CommonSilhouette, geometry: COMMON_GEOMETRY },
-  tangseng: { Component: CommonSilhouette, geometry: COMMON_GEOMETRY },
-  baigujing: { Component: CommonSilhouette, geometry: COMMON_GEOMETRY },
-  bajie: { Component: CommonSilhouette, geometry: COMMON_GEOMETRY },
-  shaseng: { Component: CommonSilhouette, geometry: COMMON_GEOMETRY },
+  wukong: { Component: WukongSilhouette, geometry: WUKONG_GEOMETRY },
+  tangseng: { Component: TangsengSilhouette, geometry: TANGSENG_GEOMETRY },
+  baigujing: { Component: BaigujingSilhouette, geometry: BAIGUJING_GEOMETRY },
+  bajie: { Component: BajieSilhouette, geometry: BAJIE_GEOMETRY },
+  shaseng: { Component: ShasengSilhouette, geometry: SHASENG_GEOMETRY },
 };
 
-/** 给定角色返回其 silhouette 组件与几何契约。M1 期间全部返回 Common */
+export { CommonSilhouette, COMMON_GEOMETRY };
+
 export function resolveSilhouette(roleId: RoleId): SilhouetteEntry {
   return REGISTRY[roleId];
 }
