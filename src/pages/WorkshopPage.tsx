@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowRight, Check } from "lucide-react";
 import { GameShell } from "@/components/GameShell";
@@ -10,14 +10,14 @@ import { useGameStore, useWorkshopProgress } from "@/store/gameStore";
 import { createEmptyPuppet } from "@/types/puppet";
 import { CarvingGame } from "./workshop/games/CarvingGame";
 import { JointingGame } from "./workshop/games/JointingGame";
+import { LeatherGame } from "./workshop/games/LeatherGame";
+import { ColoringGame } from "./workshop/games/ColoringGame";
 import type { RoleId } from "@/types/game";
 
 export function WorkshopPage() {
   const params = useParams();
   const puppet = useGameStore((state) => state.puppet);
   const initPuppet = useGameStore((state) => state.initPuppet);
-  const setLeather = useGameStore((state) => state.setLeatherTranslucency);
-  const updateColoring = useGameStore((state) => state.updateColoring);
   const progress = useWorkshopProgress();
 
   const roleIdFromUrl = (params.roleId as RoleId | undefined) ?? "wukong";
@@ -30,25 +30,6 @@ export function WorkshopPage() {
 
   const activePuppet = puppet ?? createEmptyPuppet(roleIdFromUrl);
   const role = roles.find((r) => r.id === activePuppet.roleId) ?? roles[0];
-
-  // ===== M1 临时迷你游戏(后续 Task 12~14 替换) =====
-  const [leatherClicked, setLeatherClicked] = useState(0);
-
-  const handleLeatherTick = useCallback(() => {
-    const next = leatherClicked + 1;
-    setLeatherClicked(next);
-    if (next >= 12) {
-      setLeather(0.85);
-    }
-  }, [leatherClicked, setLeather]);
-
-  const handleColorPreset = useCallback(() => {
-    updateColoring("robe", role.color);
-    updateColoring("prop", role.accent);
-    updateColoring("head", "#F4E5C0");
-    updateColoring("face", "#F4E5C0");
-    updateColoring("sash", "#D99A2B");
-  }, [role, updateColoring]);
 
   const allDone = progress.completedCount >= 4;
 
@@ -118,30 +99,13 @@ export function WorkshopPage() {
                 {isActive && !done && (
                   <div className="mt-4 border-t border-[#F4E5C0]/8 pt-4">
                     {step.id === "leather" && (
-                      <div className="space-y-2">
-                        <p className="text-sm text-[#F4E5C0]/70">
-                          (M1 占位)点击 12 次模拟绷钉:已点 {leatherClicked} / 12
-                        </p>
-                        <button
-                          type="button"
-                          onClick={handleLeatherTick}
-                          className="rounded-full bg-[#D99A2B] px-4 py-2 text-sm font-semibold text-[#120B08]"
-                        >
-                          绷一钉
-                        </button>
-                      </div>
+                      <LeatherGame onDone={() => undefined} />
                     )}
                     {step.id === "carving" && (
                       <CarvingGame onAllDone={(grade) => { void grade; }} />
                     )}
                     {step.id === "coloring" && (
-                      <button
-                        type="button"
-                        onClick={handleColorPreset}
-                        className="rounded-full bg-[#D99A2B] px-4 py-2 text-sm font-semibold text-[#120B08]"
-                      >
-                        (M1 占位)套用角色配色
-                      </button>
+                      <ColoringGame onDone={() => undefined} />
                     )}
                     {step.id === "jointing" && (
                       <JointingGame onAllDone={(grade) => { void grade; }} />
