@@ -7,7 +7,8 @@ import { ShadowPuppet } from "@/components/ShadowPuppet";
 import { roles, workshopSteps, defaultPose } from "@/data/gameData";
 import { cn } from "@/lib/utils";
 import { useGameStore, useWorkshopProgress } from "@/store/gameStore";
-import { createEmptyPuppet, CARVE_REGION_IDS, JOINT_IDS } from "@/types/puppet";
+import { createEmptyPuppet, JOINT_IDS } from "@/types/puppet";
+import { CarvingGame } from "./workshop/games/CarvingGame";
 import type { RoleId } from "@/types/game";
 
 export function WorkshopPage() {
@@ -15,8 +16,6 @@ export function WorkshopPage() {
   const puppet = useGameStore((state) => state.puppet);
   const initPuppet = useGameStore((state) => state.initPuppet);
   const setLeather = useGameStore((state) => state.setLeatherTranslucency);
-  const setCarveRegion = useGameStore((state) => state.setCarveRegion);
-  const recomputeCarving = useGameStore((state) => state.recomputeCarvingGrade);
   const updateColoring = useGameStore((state) => state.updateColoring);
   const setJointPiece = useGameStore((state) => state.setJointPiece);
   const recomputeJoints = useGameStore((state) => state.recomputeJointsGrade);
@@ -43,13 +42,6 @@ export function WorkshopPage() {
       setLeather(0.85);
     }
   }, [leatherClicked, setLeather]);
-
-  const handleCarveAll = useCallback(() => {
-    for (const id of CARVE_REGION_IDS) {
-      setCarveRegion(id, { carved: true, quality: 0.7 });
-    }
-    recomputeCarving();
-  }, [setCarveRegion, recomputeCarving]);
 
   const handleColorPreset = useCallback(() => {
     updateColoring("robe", role.color);
@@ -148,13 +140,7 @@ export function WorkshopPage() {
                       </div>
                     )}
                     {step.id === "carving" && (
-                      <button
-                        type="button"
-                        onClick={handleCarveAll}
-                        className="rounded-full bg-[#D99A2B] px-4 py-2 text-sm font-semibold text-[#120B08]"
-                      >
-                        (M1 占位)一键完成雕刻
-                      </button>
+                      <CarvingGame onAllDone={(grade) => { void grade; }} />
                     )}
                     {step.id === "coloring" && (
                       <button
