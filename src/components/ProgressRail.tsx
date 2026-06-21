@@ -1,43 +1,45 @@
-import { CheckCircle2 } from "lucide-react";
+// src/components/ProgressRail.tsx
+import { Check } from "lucide-react";
 import { workshopSteps } from "@/data/gameData";
 import { cn } from "@/lib/utils";
-import type { WorkshopStep } from "@/types/game";
+import type { WorkshopProgress } from "@/store/gameStore";
 
 interface ProgressRailProps {
-  completedSteps: WorkshopStep[];
+  progress: WorkshopProgress;
 }
 
-/**
- * 展示玩家从制皮到演出的进度，强化“亲手做出皮影”的阶段感。
- */
-export function ProgressRail({ completedSteps }: ProgressRailProps) {
+export function ProgressRail({ progress }: ProgressRailProps) {
   return (
-    <section className="rounded-[2rem] border border-[#D99A2B]/20 bg-[#1C100B]/72 p-5 shadow-2xl">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-serif text-lg text-[#F4E5C0]">制影进度</h2>
-        <span className="text-xs text-[#D99A2B]">{completedSteps.length}/4</span>
-      </div>
-      <div className="grid gap-3 md:grid-cols-4">
-        {workshopSteps.map((step, index) => {
-          const done = completedSteps.includes(step.id);
-          return (
+    <div className="flex items-center gap-2 overflow-x-auto rounded-full border border-[#F4E5C0]/8 bg-[#1C100B]/50 px-4 py-3">
+      {workshopSteps.map((step, idx) => {
+        const done = progress[step.id];
+        const isActive = progress.activeStep === step.id;
+        return (
+          <div key={step.id} className="flex items-center gap-2">
             <div
-              key={step.id}
               className={cn(
-                "relative rounded-2xl border p-4 transition",
-                done ? "border-[#D99A2B]/55 bg-[#D99A2B]/14" : "border-[#F4E5C0]/10 bg-[#F4E5C0]/5",
+                "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs transition",
+                done
+                  ? "bg-[#D99A2B]/20 text-[#D99A2B]"
+                  : isActive
+                  ? "bg-[#F4E5C0]/10 text-[#F4E5C0]"
+                  : "text-[#F4E5C0]/40",
               )}
             >
-              <div className="mb-3 flex items-center justify-between">
-                <span className="text-xs text-[#F4E5C0]/45">第 {index + 1} 步</span>
-                <CheckCircle2 className={cn("h-4 w-4", done ? "text-[#D99A2B]" : "text-[#F4E5C0]/18")} />
-              </div>
-              <p className="font-serif text-base text-[#F4E5C0]">{step.name}</p>
-              <p className="mt-1 text-xs text-[#F4E5C0]/58">{step.actionLabel}</p>
+              {done && <Check className="h-3 w-3" />}
+              <span>{step.name}</span>
             </div>
-          );
-        })}
-      </div>
-    </section>
+            {idx < workshopSteps.length - 1 && (
+              <span
+                className={cn(
+                  "h-px w-6 transition",
+                  done ? "bg-[#D99A2B]/40" : "bg-[#F4E5C0]/10",
+                )}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 }
