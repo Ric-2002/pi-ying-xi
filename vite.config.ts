@@ -4,6 +4,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    host: '127.0.0.1',
+    port: 5178,
+    strictPort: true,
+  },
   build: {
     sourcemap: 'hidden',
   },

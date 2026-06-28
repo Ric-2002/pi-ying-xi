@@ -4,10 +4,10 @@
   "description": "A React shadow puppetry web game inspired by Journey to the West.",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1 --port 5178 --strictPort",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "vite preview --host 127.0.0.1 --port 4278 --strictPort",
     "check": "tsc -b --noEmit"
   },
   "dependencies": {
